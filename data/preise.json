@@ -1,0 +1,48 @@
+{
+  "druck": [
+    ["Kleine Objekte (bis 10 cm)", "ab 5 €"],
+    ["Mittlere Objekte (10–20 cm)", "ab 15 €"],
+    ["Große Objekte (über 20 cm)", "ab 30 €"],
+    ["Prototypen", "ab 60 €"],
+    ["Serienfertigung", "ab 50 €"],
+    ["Spezialanfertigungen", "ab 80 €"],
+    ["Materialkosten", "ab 20 €"],
+    ["Nachbearbeitung", "ab 12 €"],
+    ["Designanpassungen", "Preis auf Anfrage nach kostenloser Beratung"],
+    ["Komplexe Strukturen", "ab 220 €"],
+    ["Individuelle Projekte", "Preis auf Anfrage nach kostenloser Beratung"],
+    ["Express-Service", "Preis auf Anfrage nach kostenloser Beratung"],
+    ["Langzeitprojekte", "Preis auf Anfrage nach kostenloser Beratung"]
+  ],
+  "schnitt": [
+    ["Kleine Objekte (bis 10 cm)", "ab 5 €"],
+    ["Mittlere Objekte (10–20 cm)", "ab 15 €"],
+    ["Große Objekte (über 20 cm)", "ab 20 €"],
+    ["Prototypen", "ab 8 €"],
+    ["Serienfertigung", "ab 20 €"],
+    ["Spezialanfertigungen", "ab 25 €"],
+    ["Materialkosten", "ab 10 €"],
+    ["Nachbearbeitung", "ab 6 €"],
+    ["Designanpassungen", "Preis auf Anfrage nach kostenloser Beratung"],
+    ["Komplexe Strukturen", "ab 100 €"],
+    ["Individuelle Projekte", "Preis auf Anfrage nach kostenloser Beratung"],
+    ["Express-Service", "Preis auf Anfrage nach kostenloser Beratung"],
+    ["Langzeitprojekte", "Preis auf Anfrage nach kostenloser Beratung"]
+  ],
+  "gravur": {
+    "spalten": ["Klein (bis 10 cm)", "Mittel (10–20 cm)", "Groß (über 20 cm)"],
+    "zeilen": [
+      ["Einfach", "Schrift, kleine Symbole", "ab 10 €", "ab 20 €", "ab 30 €"],
+      ["Mittlere Komplexität", "Schrift, einfache Bilder", "ab 15 €", "ab 25 €", "ab 35 €"],
+      ["Hohe Komplexität", "detaillierte Bilder, komplexe Designs", "ab 20 €", "ab 30 €", "ab 40 €"]
+    ],
+    "zusatz": [
+      ["Materialkosten", "ab 5 €"],
+      ["Nachbearbeitung", "ab 6 €"],
+      ["Designanpassungen", "Preis auf Anfrage nach kostenloser Beratung"],
+      ["Individuelle Projekte", "Preis auf Anfrage nach kostenloser Beratung"],
+      ["Express-Service", "Preis auf Anfrage nach kostenloser Beratung"],
+      ["Langzeitprojekte", "Preis auf Anfrage nach kostenloser Beratung"]
+    ]
+  }
+}
