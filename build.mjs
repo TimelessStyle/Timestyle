@@ -16,6 +16,7 @@ const stimmen = read('stimmen.json');
 const produkte = read('produkte.json');
 
 const warnings = [];
+if (cfg.versandPauschale == null) warnings.push('versandPauschale in site.config.json ist leer: der Shop bietet vorerst nur Abholung an.');
 if (/BITTE|example/i.test(cfg.siteUrl)) warnings.push('siteUrl in site.config.json ist noch ein Platzhalter. Canonical, Sitemap und Social-Vorschau zeigen auf eine falsche Adresse, bis das ersetzt ist.');
 
 /* ---------- Helfer ---------- */
@@ -26,6 +27,7 @@ const href = (p) => base + p;
 const abs = (p) => cfg.siteUrl + base + p;
 const exists = (p) => fs.existsSync(path.join(SRC, p));
 const findImg = (dir, slug) => { for (const e of ['webp', 'avif', 'jpg', 'jpeg', 'png']) if (exists(`assets/img/${dir}/${slug}.${e}`)) return `/assets/img/${dir}/${slug}.${e}`; return null; };
+const eur = (n) => n.toFixed(2).replace('.', ',') + ' €';
 const year = new Date().getFullYear();
 const today = new Date().toISOString().slice(0, 10);
 const addr = `${cfg.strasse}, ${cfg.plz} ${cfg.ort}`;
@@ -105,24 +107,24 @@ function nav(p) {
   return `<a class="skip" href="#main">Zum Inhalt springen</a>
 <header class="nav" id="top"><div class="wrap nav-in">
 <a class="brand" href="${href('/')}" aria-label="Timestyle_Gravur – zur Startseite">${mark}<span>Timestyle_Gravur</span></a>
-<nav aria-label="Hauptnavigation"><ul class="nav-links" id="menu">${links}<li><a class="nav-cart" href="${href('/anfrage/')}"${p === '/anfrage/' ? ' aria-current="page"' : ''}>Anfrage <span class="badge" data-cart-count data-empty="true" aria-label="Artikel in der Anfrage">0</span></a></li></ul></nav>
+<nav aria-label="Hauptnavigation"><ul class="nav-links" id="menu">${links}<li><a class="nav-cart" href="${href('/warenkorb/')}"${p === '/warenkorb/' ? ' aria-current="page"' : ''}>Warenkorb <span class="badge" data-cart-count data-empty="true" aria-label="Artikel im Warenkorb">0</span></a></li></ul></nav>
 <button class="menu-btn" type="button" aria-label="Menü öffnen oder schließen" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 </div></header>`;
 }
 
-function footer() {
+function footer(pg = {}) {
   return `<footer class="footer"><div class="wrap">
 <div class="foot-grid">
 <div><a class="brand" href="${href('/')}" style="color:#f5f5f7">${mark}<span>Timestyle_Gravur</span></a>
 <p style="margin-top:14px;max-width:30ch">Präzision trifft Kreativität. Dein Partner für 3D-Druck und Laserbearbeitung.</p>
 <div class="social"><a href="${cfg.facebook}" target="_blank" rel="noopener" aria-label="Timestyle_Gravur auf Facebook">${icon('fb', '')}</a><a href="${cfg.instagram}" target="_blank" rel="noopener" aria-label="Timestyle_Gravur auf Instagram">${icon('ig', '')}</a></div></div>
-<div><h4>Seiten</h4><ul>${NAV.map(([u, t]) => `<li><a href="${href(u)}">${esc(t)}</a></li>`).join('')}<li><a href="${href('/anfrage/')}">Anfrage</a></li></ul></div>
+<div><h4>Seiten</h4><ul>${NAV.map(([u, t]) => `<li><a href="${href(u)}">${esc(t)}</a></li>`).join('')}<li><a href="${href('/warenkorb/')}">Warenkorb</a></li></ul></div>
 <div><h4>Leistungen</h4><ul><li><a href="${href('/leistungen-preise/#3d-druck')}">3D-Druck</a></li><li><a href="${href('/leistungen-preise/#laserschneiden')}">Laserschnitt</a></li><li><a href="${href('/leistungen-preise/#lasergravur')}">Lasergravur</a></li><li><a href="${href('/shop/')}">Shop</a></li></ul></div>
 <div><h4>Kontakt</h4><ul><li>${esc(cfg.strasse)}<br>${esc(cfg.plz)} ${esc(cfg.ort)}</li><li><a href="tel:${cfg.telefonLink}">${esc(cfg.telefon)}</a></li><li><a href="mailto:${cfg.email}">${esc(cfg.email)}</a></li></ul></div>
 </div>
-<div class="foot-bottom"><span>© ${year} ${esc(cfg.name)} · ${esc(cfg.inhaber)}</span><ul><li><a href="${href('/impressum/')}">Impressum</a></li><li><a href="${href('/datenschutz/')}">Datenschutz</a></li></ul></div>
+<div class="foot-bottom"><span>© ${year} ${esc(cfg.name)} · ${esc(cfg.inhaber)}</span><ul><li><a href="${href('/versand-zahlung/')}">Versand &amp; Zahlung</a></li><li><a href="${href('/widerruf/')}">Widerruf</a></li><li><a href="${href('/agb/')}">AGB</a></li><li><a href="${href('/impressum/')}">Impressum</a></li><li><a href="${href('/datenschutz/')}">Datenschutz</a></li></ul></div>
 </div></footer>
-<script src="${href('/assets/js/main.js')}?v=${today}" defer></script>
+<script src="${href('/assets/js/main.js')}?v=${today}" defer></script>${pg.laser ? `\n<script src="${href('/assets/js/hero-laser.js')}?v=${today}" defer></script>` : ''}
 </body></html>`;
 }
 
@@ -149,7 +151,7 @@ const cats = produkte.kategorien.map((c) => {
     .map((a) => {
       let slug = slugify(a[0]); let n = 2; while (seen.has(slug)) slug = `${slugify(a[0])}-${n++}`; seen.add(slug);
       const o = a[2] || {};
-      return { slug, name: a[0], price: a[1], alt: o.alt || `${a[0]} – ${c.name} von Timestyle_Gravur`, img: findImg('produkte', slug), pdf: o.anleitung && exists(`downloads/${o.anleitung}`) ? o.anleitung : null };
+      return { slug, name: a[0], price: a[1], unit: o.einheit || '', variants: o.varianten || null, alt: o.alt || `${a[0]} – ${c.name} von Timestyle_Gravur`, img: findImg('produkte', slug), pdf: o.anleitung && exists(`downloads/${o.anleitung}`) ? o.anleitung : null };
     });
   return { ...c, items };
 });
@@ -187,7 +189,7 @@ const storySteps = [
 ];
 
 addPage({
-  p: '/', title: 'Lasergravur & 3D-Druck bei Tulln | Timestyle_Gravur',
+  p: '/', laser: true, title: 'Lasergravur & 3D-Druck bei Tulln | Timestyle_Gravur',
   desc: 'Timestyle_Gravur aus Sieghartskirchen bei Tulln: Lasergravur, Laserschnitt und 3D-Druck, präzise, individuell und alles aus einer Hand. Jetzt anfragen.',
   ld: homeLd,
   body: `<main id="main">
@@ -200,7 +202,7 @@ addPage({
 </div>
 <div class="board wood" role="img" aria-label="Holztafel mit eingraviertem Schriftzug Timestyle_Gravur und goldener Laserlinie">
 <span class="screw s1"></span><span class="screw s2"></span><span class="screw s3"></span><span class="screw s4"></span>
-<div class="engrave" aria-hidden="true">Timestyle_Gravur<small>Lasergravur · Laserschnitt · 3D-Druck</small></div></div>
+<canvas class="laser" aria-hidden="true"></canvas><div class="engrave" aria-hidden="true">Timestyle_Gravur<small>Lasergravur · Laserschnitt · 3D-Druck</small></div></div>
 <div class="scroll-cue" aria-hidden="true"></div>
 </section>
 
@@ -223,8 +225,8 @@ addPage({
 </div></div></section>
 
 <section class="section gray" aria-labelledby="sortiment" style="overflow:hidden">
-<div class="wrap"><div class="${R()}"><p class="eyebrow">Sortiment</p><h2 class="h2" id="sortiment">Schon gesehen?<br><span class="muted">Mehr als ${Math.floor(totalItems / 10) * 10} Artikel im Shop.</span></h2></div></div>
-<div class="wrap"><div class="chips-scroll">${cats.filter((c) => c.items.length).map((c) => `<a class="cat-card" href="${href('/shop/#' + c.id)}">${icon(c.icon, '')}<b>${esc(c.name)}</b><small>${c.items.length} Artikel</small></a>`).join('')}</div></div>
+<div class="wrap"><div class="${R()}"><p class="eyebrow">Sortiment</p><h2 class="h2" id="sortiment">Schon gesehen?<br><span class="muted">Mehr als ${Math.floor(totalItems / 10) * 10} Artikel im Shop.</span></h2><p class="lead" style="margin-top:14px">Seitlich verschieben oder die Pfeile nutzen.</p></div></div>
+<div class="wrap"><div class="carousel"><button class="car-btn prev" type="button" aria-label="Kategorien zurück" disabled>‹</button><div class="chips-scroll" tabindex="0" role="region" aria-label="Warenkategorien, seitlich verschiebbar">${cats.filter((c) => c.items.length).map((c) => `<a class="cat-card" href="${href('/shop/#' + c.id)}" draggable="false">${icon(c.icon, '')}<b>${esc(c.name)}</b><small>${c.items.length} Artikel</small></a>`).join('')}</div><button class="car-btn next" type="button" aria-label="Kategorien weiter">›</button></div></div>
 </section>
 
 <section class="section" aria-labelledby="preise">
@@ -250,7 +252,7 @@ addPage({
 <section class="section wood final-cta" aria-labelledby="cta" style="color:#fbefd8">
 <div class="wrap ${R()}"><h2 class="h2" id="cta">Eine Idee im Kopf?<br>Gemeinsam umsetzen.</h2>
 <p class="lead" style="margin:0 auto 28px;color:#e9d3b2">Anfrage senden oder direkt vorbeikommen: ${esc(addr)}.</p>
-<div class="cta-row"><a class="btn btn-gold" href="${href('/anfrage/')}">Anfrage senden</a><a class="btn btn-ghost" href="${href('/kontakt/')}">Kontakt &amp; Anfahrt</a></div></div></section>
+<div class="cta-row"><a class="btn btn-gold" href="${href('/kontakt/#formular')}">Anfrage senden</a><a class="btn btn-ghost" href="${href('/kontakt/')}">Kontakt &amp; Anfahrt</a></div></div></section>
 </main>`,
 });
 
@@ -271,16 +273,16 @@ addPage({
 <div class="table-wrap"><table><caption class="sr-only">Preisliste Lasergravur nach Komplexität und Größe</caption><thead><tr><th scope="col">Komplexität</th>${preise.gravur.spalten.map((s) => `<th scope="col">${esc(s)}</th>`).join('')}</tr></thead><tbody>${preise.gravur.zeilen.map((z) => `<tr><th scope="row">${esc(z[0])}<span class="tbl-sub">${esc(z[1])}</span></th>${z.slice(2).map((x) => `<td class="p">${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
 <h3 style="margin:34px 0 14px;font-size:1.3rem">Zusatzleistungen Lasergravur</h3>${tbl('Zusatzleistungen Lasergravur', preise.gravur.zusatz)}</div>
 
-<div class="center ${R()}" style="margin-top:80px"><h2 class="h2" style="margin-bottom:18px">Passt das zu deinem Projekt?</h2><p class="lead" style="margin:0 auto 26px">Beratung ist kostenlos. Einfach Anfrage senden.</p><div class="cta-row"><a class="btn btn-dark" href="${href('/anfrage/')}">Anfrage senden</a><a class="btn btn-line" href="${href('/kontakt/')}">Kontakt</a></div></div>
+<div class="center ${R()}" style="margin-top:80px"><h2 class="h2" style="margin-bottom:18px">Passt das zu deinem Projekt?</h2><p class="lead" style="margin:0 auto 26px">Beratung ist kostenlos. Einfach Anfrage senden.</p><div class="cta-row"><a class="btn btn-dark" href="${href('/kontakt/#formular')}">Anfrage senden</a><a class="btn btn-line" href="${href('/kontakt/')}">Kontakt</a></div></div>
 </div></section></main>`,
 });
 
 /* ---------- Shop ---------- */
 addPage({
   p: '/shop/', title: 'Shop – 3D-Druck Lampen, Spielzeug, Deko | Timestyle_Gravur',
-  desc: `Über ${Math.floor(totalItems / 10) * 10} Artikel aus dem 3D-Drucker: Lampen, Spielzeug, Deko, Schmuck, Interior Design, Sport und mehr. Preise ab, Anfrage per E-Mail.`,
+  desc: `Über ${Math.floor(totalItems / 10) * 10} Artikel aus dem 3D-Drucker online bestellen: Lampen, Spielzeug, Deko, Schmuck, Interior Design und mehr. Versand oder Abholung.`,
   ld: { '@context': 'https://schema.org', '@graph': [crumbsLd('/shop/', 'Shop'), { '@type': 'ItemList', name: 'Shop-Kategorien', itemListElement: cats.filter((c) => c.items.length).map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: abs('/shop/#' + c.id) })) }] },
-  body: `<main id="main">${pageHero('Der <span class="gold-text">Shop</span>', 'Artikel aus dem 3D-Drucker. Alle Preise sind „ab“-Preise. Gewünschte Artikel zur Anfrage hinzufügen und per E-Mail senden.', 'Shop', 'Sortiment')}
+  body: `<main id="main">${pageHero('Der <span class="gold-text">Shop</span>', 'Artikel aus dem 3D-Drucker, direkt bestellbar. Preise gelten für die Standardausführung, Sonderwünsche über das Kontaktformular.', 'Shop', 'Sortiment')}
 <div class="toolbar"><div class="wrap toolbar-in">
 <div class="search"><label class="sr-only" for="shop-search">Artikel suchen</label>${icon('search', '')}<input id="shop-search" type="search" placeholder="Artikel suchen …" autocomplete="off"></div>
 <div class="filters" role="group" aria-label="Kategorie filtern"><button type="button" data-cat="alle" aria-pressed="true">Alle<span>${totalItems}</span></button>${cats.map((c) => `<button type="button" data-cat="${c.id}" aria-pressed="false">${esc(c.name)}<span>${c.items.length}</span></button>`).join('')}</div>
@@ -289,9 +291,9 @@ addPage({
 ${cats.map((c) => `<section class="cat-block" id="${c.id}" aria-labelledby="h-${c.id}"${c.items.length ? '' : ' data-empty="true"'}><h2 id="h-${c.id}">${esc(c.name)} <small>${c.items.length} Artikel</small></h2>
 ${c.items.length ? `<div class="pgrid">${c.items.map((i) => `<article class="pcard" data-cat="${c.id}" data-name="${esc(i.name)}">
 <div class="pimg${i.img ? '' : ' ph'}">${i.img ? `<img src="${href(i.img)}" alt="${esc(i.alt)}" width="800" height="600" loading="lazy" decoding="async">` : icon(c.icon)}</div>
-<div class="pbody"><h3>${esc(i.name)}</h3><span class="pprice">${esc(i.price)}</span><div class="pfoot"><button type="button" class="add" data-id="${i.slug}" data-name="${esc(i.name)}" data-price="${esc(i.price)}" aria-label="${esc(i.name)} zur Anfrage hinzufügen">Zur Anfrage</button>${i.pdf ? `<a class="dl" href="${href('/downloads/' + i.pdf)}" download>Anleitung (PDF)</a>` : ''}</div></div></article>`).join('')}</div>` : `<p class="empty-cat">Aktuell sind in dieser Kategorie keine Artikel eingetragen. Wünsche gern direkt <a href="${href('/anfrage/')}">anfragen</a>.</p>`}
+<div class="pbody"><h3>${esc(i.name)}</h3><span class="pprice">${eur(i.variants ? i.variants[0][1] : i.price)}</span>${i.unit && !i.variants ? `<span class="unit">${esc(i.unit)}</span>` : ''}${i.variants ? `<div class="vrow"><select class="var" aria-label="Variante für ${esc(i.name)}">${i.variants.map((v) => `<option data-label="${esc(v[0])}" data-price="${v[1]}">${esc(v[0])} · ${eur(v[1])}</option>`).join('')}</select></div>` : ''}<div class="pfoot"><button type="button" class="add" data-id="${i.slug}" data-name="${esc(i.name)}" data-price="${i.price}" data-unit="${esc(i.unit)}" aria-label="${esc(i.name)} in den Warenkorb legen">In den Warenkorb</button>${i.pdf ? `<a class="dl" href="${href('/downloads/' + i.pdf)}" download>Anleitung (PDF)</a>` : ''}</div></div></article>`).join('')}</div>` : `<p class="empty-cat">Aktuell sind in dieser Kategorie keine Artikel eingetragen. Wünsche gern direkt <a href="${href('/kontakt/#formular')}">anfragen</a>.</p>`}
 </section>`).join('')}
-<p id="shop-none" class="noresult" hidden>Keine Treffer. Anderen Suchbegriff probieren oder eine <a href="${href('/anfrage/')}">individuelle Anfrage</a> senden.</p>
+<p id="shop-none" class="noresult" hidden>Keine Treffer. Anderen Suchbegriff probieren oder eine <a href="${href('/kontakt/#formular')}">individuelle Anfrage</a> senden.</p>
 </div></section></main>`,
 });
 
@@ -308,7 +310,7 @@ addPage({
 <p>Timestyle_Gravur bietet Dienstleistungen in <strong>3D-Druck, Laserschnitt und Lasergravur</strong> an. Handwerkliche Präzision und Kreativität stehen im Mittelpunkt.</p>
 <p>Das Projekt begann ${cfg.gegruendet} während der Covid-Pandemie und ist seitdem stetig gewachsen. Aus einem kleinen Vorhaben wurde eine Leidenschaft, die geteilt werden soll.</p>
 <p>Ideen und Projekte lassen sich gemeinsam besprechen. Dabei entstehen kreative Lösungen, die genau zur Idee passen.</p>
-<p><a class="btn btn-dark" href="${href('/anfrage/')}">Projekt besprechen</a></p></div>
+<p><a class="btn btn-dark" href="${href('/kontakt/#formular')}">Projekt besprechen</a></p></div>
 <div class="${R(1)}"><div class="ph-photo wood">${teamImg ? `<img src="${href(teamImg)}" width="800" height="1000" alt="Manuel Jarc, Inhaber von Timestyle_Gravur, in der Werkstatt" loading="lazy">` : `<span class="ini" aria-hidden="true">MJ</span>`}</div></div>
 </div></section>
 <section class="section gray"><div class="wrap"><div class="center ${R()}"><p class="eyebrow">Unser Angebot</p><h2 class="h2">Drei Verfahren. Ein Ansprechpartner.</h2></div>
@@ -331,7 +333,7 @@ addPage({
   body: `<main id="main">${pageHero('Kundenstimmen <span class="gold-text">&amp; Galerie</span>', 'Erfahrungen von Kunden und eine Auswahl gefertigter Produkte.', 'Kundenstimmen', 'Galerie & Kundenstimmen')}
 <section class="section dark" style="padding-top:20px"><div class="wrap"><h2 class="sr-only">Kundenstimmen</h2><div class="quotes" style="margin-top:0">${stimmen.map((s, i) => `<figure class="quote ${R(i)}"><blockquote>${esc(s.zitat)}</blockquote><p>${esc(s.text)}</p><figcaption>${esc(s.name)}</figcaption></figure>`).join('')}</div></div></section>
 ${gal.length ? `<section class="section"><div class="wrap"><div class="center ${R()}"><p class="eyebrow">Galerie</p><h2 class="h2">Unsere Produkte</h2></div><div class="pgrid" style="margin-top:44px">${gal.map((f, i) => `<figure class="pcard ${R(i % 4)}" style="margin:0"><div class="pimg"><img src="${href('/assets/img/galerie/' + f)}" alt="${esc(galAlt[f] || 'Gefertigtes Produkt von Timestyle_Gravur')}" width="800" height="600" loading="lazy" decoding="async"></div></figure>`).join('')}</div></div></section>` : ''}
-<section class="section gray"><div class="wrap center ${R()}"><h2 class="h2" style="margin-bottom:16px">Als Nächstes dein Projekt.</h2><div class="cta-row" style="margin-top:22px"><a class="btn btn-dark" href="${href('/anfrage/')}">Anfrage senden</a><a class="btn btn-line" href="${href('/shop/')}">Zum Shop</a></div></div></section></main>`,
+<section class="section gray"><div class="wrap center ${R()}"><h2 class="h2" style="margin-bottom:16px">Als Nächstes dein Projekt.</h2><div class="cta-row" style="margin-top:22px"><a class="btn btn-dark" href="${href('/kontakt/#formular')}">Anfrage senden</a><a class="btn btn-line" href="${href('/shop/')}">Zum Shop</a></div></div></section></main>`,
 });
 
 /* ---------- Kontakt ---------- */
@@ -339,44 +341,116 @@ const anfahrtImg = ['webp', 'jpg', 'jpeg', 'png'].map((e) => `assets/img/anfahrt
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr + ', Österreich')}`;
 addPage({
   p: '/kontakt/', title: 'Kontakt & Anfahrt – Öpping bei Tulln | Timestyle_Gravur',
-  desc: `Kontakt zu Timestyle_Gravur: ${addr}. Öffnungszeiten, Telefon, E-Mail und Anfahrt. Bestellungen und Anfragen per E-Mail.`,
+  desc: `Kontakt zu Timestyle_Gravur: ${addr}. Öffnungszeiten, Telefon, E-Mail und Anfahrt. Anfrage per Kontaktformular.`,
   ld: { '@context': 'https://schema.org', '@graph': [crumbsLd('/kontakt/', 'Kontakt'), { '@type': 'ContactPage', url: abs('/kontakt/'), about: { '@id': abs('/#business') } }] },
-  body: `<main id="main">${pageHero('<span class="gold-text">Kontakt</span> &amp; Anfahrt', 'Bestellen Sie jetzt: per E-Mail, telefonisch oder direkt vor Ort.', 'Kontakt', 'Wir freuen uns auf dein Projekt')}
+  body: `<main id="main">${pageHero('<span class="gold-text">Kontakt</span> &amp; Anfahrt', 'Nachricht schreiben, anrufen oder direkt vorbeikommen.', 'Kontakt', 'Wir freuen uns auf dein Projekt')}
 <section class="section"><div class="wrap">
 <div class="contact-grid">
 <div class="c-card ${R(0)}"><h3>Adresse</h3><p>${esc(cfg.name)}<br>${esc(cfg.strasse)}<br>${esc(cfg.plz)} ${esc(cfg.ort)}</p><p style="margin-top:10px"><a href="${mapsUrl}" target="_blank" rel="noopener">Route in Google Maps ↗</a></p></div>
 <div class="c-card ${R(1)}"><h3>Erreichbarkeit</h3><p>Telefon: <a href="tel:${cfg.telefonLink}">${esc(cfg.telefon)}</a></p><p>E-Mail: <a href="mailto:${cfg.email}">${esc(cfg.email)}</a></p><p style="margin-top:10px">Facebook: <a href="${cfg.facebook}" target="_blank" rel="noopener">Timestyle_Gravur ↗</a><br>Instagram: <a href="${cfg.instagram}" target="_blank" rel="noopener">@timestyle_gravur ↗</a></p></div>
 <div class="c-card ${R(2)}"><h3>Öffnungszeiten</h3><table class="hours"><caption class="sr-only">Öffnungszeiten</caption><tbody>${cfg.oeffnungszeiten.map((h) => `<tr data-days="${h.schema.map((d) => ({ Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6 }[d])).join(',') || '0'}"><th scope="row">${esc(h.tage)}</th><td>${h.von ? `${h.von.replace(/^0/, '')}–${h.bis} Uhr` : 'geschlossen'}</td></tr>`).join('')}</tbody></table><div class="open-now" data-hours='${hoursJson}' aria-live="polite"></div></div>
 </div>
+<div class="contact-form-wrap" id="formular" style="margin-top:clamp(50px,8vw,100px);scroll-margin-top:90px">
+<div class="${R()}"><p class="eyebrow">Anfrage senden</p><h2 class="h2" style="margin-bottom:18px">Was darf es werden?</h2><p>Idee, Wunschartikel oder Sonderanfertigung: kurz beschreiben, die Antwort kommt per E-Mail. Die Beratung zu Designanpassungen, individuellen Projekten und Express-Service ist kostenlos.</p><p>Fertige Artikel lassen sich direkt im <a href="${href('/shop/')}">Shop</a> bestellen.</p></div>
+<form id="contact-form" class="form-card ${R(1)}" data-conf='${JSON.stringify({ email: cfg.email, endpoint: cfg.formEndpoint, key: cfg.formAccessKey })}'>
+<div class="two-f"><div class="field"><label for="c-name">Name</label><input id="c-name" name="name" autocomplete="name" required></div><div class="field"><label for="c-mail">E-Mail</label><input id="c-mail" name="email" type="email" autocomplete="email" required></div></div>
+<div class="two-f"><div class="field"><label for="c-tel">Telefon (optional)</label><input id="c-tel" name="telefon" type="tel" autocomplete="tel"></div><div class="field"><label for="c-thema">Thema</label><select id="c-thema" name="thema"><option>Lasergravur</option><option>Laserschnitt</option><option>3D-Druck</option><option>Frage zu einer Bestellung</option><option>Sonstiges</option></select></div></div>
+<div class="field"><label for="c-msg">Nachricht</label><textarea id="c-msg" name="nachricht" rows="6" required></textarea></div>
+<div class="hp" aria-hidden="true"><label>Bitte leer lassen<input name="website" tabindex="-1" autocomplete="off"></label></div>
+<label class="chk"><input type="checkbox" name="datenschutz" required><span>Die <a href="${href('/datenschutz/')}">Datenschutzerklärung</a> habe ich gelesen. Die Angaben dürfen zur Bearbeitung der Anfrage verwendet werden.</span></label>
+<button class="btn btn-dark" type="submit">Nachricht senden</button><button class="btn btn-line" type="button" id="contact-copy">Text kopieren</button>
+<p class="note-s" id="contact-status" role="status" aria-live="polite"></p></form>
+</div>
 <div class="two" style="margin-top:clamp(50px,8vw,100px)">
-<div class="${R()}"><p class="eyebrow">Bestellen Sie jetzt</p><h2 class="h2" style="margin-bottom:18px">Bestellung per <span style="white-space:nowrap">E&#8209;Mail</span>.</h2><p>Gewünschte Artikel im <a href="${href('/shop/')}">Shop</a> zur Anfrage hinzufügen und die Liste per E-Mail senden, oder direkt eine Nachricht an <a href="mailto:${cfg.email}">${esc(cfg.email)}</a> schreiben.</p><p><a class="btn btn-dark" href="${href('/anfrage/')}">Zur Anfrage</a></p></div>
 <div class="${R(1)}"><p class="eyebrow">Anfahrt</p><h2 class="h2" style="margin-bottom:18px">Gern persönlich vorbeikommen.</h2><p>Besuche sind willkommen, am besten innerhalb der Öffnungszeiten.</p>${anfahrtImg ? `<img src="${href('/' + anfahrtImg)}" width="800" height="500" loading="lazy" alt="Anfahrtsskizze zu Timestyle_Gravur in ${esc(cfg.ort)}" style="border-radius:var(--radius-s)">` : ''}</div>
 </div></div></section></main>`,
 });
 
-/* ---------- Anfrage ---------- */
+/* ---------- Warenkorb + Bestellung ---------- */
+const canShip = cfg.versandPauschale != null;
 addPage({
-  p: '/anfrage/', title: 'Anfrage senden | Timestyle_Gravur', noindex: true,
-  desc: 'Ausgewählte Artikel und Leistungen von Timestyle_Gravur gesammelt per E-Mail anfragen.',
-  body: `<main id="main">${pageHero('Deine <span class="gold-text">Anfrage</span>', 'Die Liste bleibt in deinem Browser. Gesendet wird erst, wenn du die E-Mail abschickst.', 'Anfrage', 'Warenkorb')}
-<section class="section" style="padding-top:20px"><div class="wrap" id="cart-root" data-conf='${JSON.stringify({ email: cfg.email })}'>
-<noscript><p class="empty-box">Für die Anfrageliste wird JavaScript benötigt. Alternativ direkt per E-Mail an <a href="mailto:${cfg.email}">${esc(cfg.email)}</a>.</p></noscript>
+  p: '/warenkorb/', title: 'Warenkorb & Bestellung | Timestyle_Gravur', noindex: true,
+  desc: 'Warenkorb und Bestellung bei Timestyle_Gravur: Versand oder Abholung, Vorkasse oder Barzahlung bei Abholung.',
+  body: `<main id="main">${pageHero('Dein <span class="gold-text">Warenkorb</span>', 'Artikel prüfen, Lieferart wählen und verbindlich bestellen.', 'Warenkorb', 'Bestellung')}
+<section class="section" style="padding-top:20px"><div class="wrap" id="cart-root" data-conf='${JSON.stringify({ email: cfg.email, endpoint: cfg.formEndpoint, key: cfg.formAccessKey, versand: cfg.versandPauschale, klein: cfg.kleinunternehmer, land: cfg.versandLand })}'>
+<noscript><p class="empty-box">Für den Warenkorb wird JavaScript benötigt. Bestellungen alternativ per E-Mail an <a href="mailto:${cfg.email}">${esc(cfg.email)}</a>.</p></noscript>
+<div id="order-done" hidden><h2 class="h2">Danke für die Bestellung!</h2><p class="lead" style="margin:14px auto 22px">Bestellnummer <strong id="order-no"></strong>. Die Bestellbestätigung mit den Zahlungsinformationen kommt per E-Mail.</p><a class="btn btn-dark" href="${href('/shop/')}">Weiter einkaufen</a></div>
 <div class="cart-layout">
-<div><div id="cart-empty" class="empty-box"><h2 style="font-size:1.5rem;margin-bottom:10px">Noch nichts ausgewählt.</h2><p class="muted">Im Shop Artikel zur Anfrage hinzufügen, oder unten direkt eine Nachricht schreiben.</p><a class="btn btn-dark" href="${href('/shop/')}">Zum Shop</a></div>
-<ul id="cart-items" class="cart-list" hidden></ul></div>
-<form id="cart-form" class="form-card" hidden>
-<h2 style="font-size:1.4rem">Kontaktdaten</h2>
-<div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
-<div class="field"><label for="f-mail">E-Mail</label><input id="f-mail" name="email" type="email" autocomplete="email" required></div>
-<div class="field"><label for="f-tel">Telefon (optional)</label><input id="f-tel" name="telefon" type="tel" autocomplete="tel"></div>
-<div class="field"><label for="f-msg">Nachricht / Wünsche (optional)</label><textarea id="f-msg" name="nachricht" rows="4"></textarea></div>
-<button class="btn btn-dark" type="submit">Anfrage per E-Mail senden</button>
-<button class="btn btn-line" type="button" id="cart-copy">Text kopieren</button>
-<button class="rm" type="button" id="cart-clear">Liste leeren</button>
-<p class="note-s" id="cart-status" role="status" aria-live="polite"></p>
-<p class="note-s">Es werden keine Daten an einen Server übertragen. Der Button öffnet das E-Mail-Programm mit einem vorbereiteten Text an ${esc(cfg.email)}. Alle Preise sind Richtwerte („ab“). Mehr dazu in der <a href="${href('/datenschutz/')}">Datenschutzerklärung</a>.</p>
+<div><div id="cart-empty" class="empty-box"><h2 style="font-size:1.5rem;margin-bottom:10px">Der Warenkorb ist leer.</h2><p class="muted">Im Shop Artikel in den Warenkorb legen.</p><a class="btn btn-dark" href="${href('/shop/')}">Zum Shop</a></div>
+<ul id="cart-items" class="cart-list" hidden></ul><div id="cart-sum" class="sum" hidden></div></div>
+<form id="order-form" class="form-card" hidden>
+<fieldset><legend>Lieferart</legend>
+<label class="opt"><input type="radio" name="lieferart" value="abholung" ${canShip ? '' : 'checked'}><span>Abholung vor Ort<small>kostenlos, nach Terminabsprache zu den Öffnungszeiten (${esc(cfg.strasse)}, ${esc(cfg.ort)})</small></span></label>
+${canShip ? `<label class="opt"><input type="radio" name="lieferart" value="versand" checked><span>Versand innerhalb Österreichs<small>Pauschale ${eur(cfg.versandPauschale)}</small></span></label>` : `<p class="note-s">Versand ist derzeit nicht eingerichtet, es ist nur Abholung möglich.</p>`}
+</fieldset>
+<div class="two-f"><div class="field"><label for="o-vn">Vorname</label><input id="o-vn" name="vorname" autocomplete="given-name" required></div><div class="field"><label for="o-nn">Nachname</label><input id="o-nn" name="nachname" autocomplete="family-name" required></div></div>
+<div class="field"><label for="o-mail">E-Mail</label><input id="o-mail" name="email" type="email" autocomplete="email" required></div>
+<div class="field"><label for="o-tel">Telefon (optional)</label><input id="o-tel" name="telefon" type="tel" autocomplete="tel"></div>
+<div id="addr-box" hidden><div class="field"><label for="o-str">Straße und Hausnummer</label><input id="o-str" name="strasse" autocomplete="street-address"></div><div class="two-f" style="margin-top:12px"><div class="field"><label for="o-plz">PLZ</label><input id="o-plz" name="plz" autocomplete="postal-code" inputmode="numeric"></div><div class="field"><label for="o-ort">Ort</label><input id="o-ort" name="ort" autocomplete="address-level2"></div></div><p class="note-s" style="margin-top:8px">Versand nur innerhalb von ${esc(cfg.versandLand)}.</p></div>
+<fieldset><legend>Zahlungsart</legend>
+<label class="opt"><input type="radio" name="zahlung" id="pay-pre" value="vorkasse" checked><span>Vorkasse per Überweisung<small>Die Zahlungsdaten kommen mit der Bestellbestätigung per E-Mail.</small></span></label>
+<label class="opt"><input type="radio" name="zahlung" id="pay-cash" value="bar"><span>Barzahlung bei Abholung</span></label>
+</fieldset>
+<div class="field"><label for="o-msg">Anmerkung (optional)</label><textarea id="o-msg" name="nachricht" rows="3"></textarea></div>
+<div class="hp" aria-hidden="true"><label>Bitte leer lassen<input name="website" tabindex="-1" autocomplete="off"></label></div>
+<label class="chk"><input type="checkbox" name="agb" required><span>Ich akzeptiere die <a href="${href('/agb/')}" target="_blank">AGB</a> und habe die <a href="${href('/datenschutz/')}" target="_blank">Datenschutzerklärung</a> gelesen.</span></label>
+<label class="chk"><input type="checkbox" name="widerruf" required><span>Die <a href="${href('/widerruf/')}" target="_blank">Widerrufsbelehrung</a> habe ich zur Kenntnis genommen. Mir ist bekannt, dass für nach meinen Wünschen angefertigte Waren kein Widerrufsrecht besteht.</span></label>
+<button class="btn btn-dark" type="submit" id="order-btn">Zahlungspflichtig bestellen</button>
+<button class="btn btn-line" type="button" id="order-copy">Bestelltext kopieren</button>
+<button class="rm" type="button" id="cart-clear">Warenkorb leeren</button>
+<p class="note-s" id="order-status" role="status" aria-live="polite"></p>
+<p class="note-s">Mehr zu <a href="${href('/versand-zahlung/')}">Versand und Zahlung</a>. ${cfg.formEndpoint ? 'Die Bestellung wird über einen Formular-Dienst an uns übermittelt.' : 'Der Button öffnet das E-Mail-Programm mit einem vorbereiteten Bestelltext an ' + esc(cfg.email) + '. Erst das Absenden der E-Mail löst die Bestellung aus.'}</p>
 </form></div></div></section></main>`,
 });
+
+/* ---------- Rechtstexte (Entwürfe) ---------- */
+const legal = (p, title, h1, desc, inner, note) => addPage({ p, title: `${title} | Timestyle_Gravur`, desc, body: `<main id="main">${pageHero(h1, '', title)}\n<!-- ENTWURF: vor Livegang rechtlich prüfen lassen (z. B. WKO-Rechtsservice). ${note || ''} -->\n<section class="section" style="padding-top:20px"><div class="wrap prose">${inner}</div></section></main>` });
+const kuTxt = cfg.kleinunternehmer ? 'Es wird keine Umsatzsteuer ausgewiesen (Kleinunternehmerregelung gemäß § 6 Abs. 1 Z 27 UStG).' : 'Alle Preise verstehen sich inklusive gesetzlicher Umsatzsteuer.';
+const kontaktBlock = `${esc(cfg.inhaber)}, ${esc(cfg.name)}, ${esc(cfg.strasse)}, ${esc(cfg.plz)} ${esc(cfg.ort)}, Österreich · E-Mail: <a href="mailto:${cfg.email}">${esc(cfg.email)}</a> · Telefon: ${esc(cfg.telefon)}`;
+
+legal('/versand-zahlung/', 'Versand & Zahlung', 'Versand &amp; Zahlung', 'Versand, Abholung und Zahlungsarten bei Timestyle_Gravur: Pauschalen, Lieferzeit, Vorkasse oder Barzahlung bei Abholung.', `
+<h2 style="margin-top:0">Lieferung</h2>
+<ul><li><strong>Abholung:</strong> kostenlos, nach Terminabsprache zu den Öffnungszeiten in ${esc(cfg.strasse)}, ${esc(cfg.plz)} ${esc(cfg.ort)}.</li>
+<li><strong>Versand innerhalb Österreichs:</strong> ${canShip ? `Pauschale ${eur(cfg.versandPauschale)} pro Bestellung.` : 'derzeit nicht verfügbar.'}</li>
+<li><strong>Lieferzeit:</strong> Die voraussichtliche Lieferzeit wird mit der Bestellbestätigung mitgeteilt. Individuell angefertigte Artikel (Gravur, Laserschnitt, Sonderwünsche) können länger dauern.</li></ul>
+<h2>Zahlung</h2>
+<ul><li><strong>Vorkasse per Überweisung:</strong> Die Zahlungsdaten kommen mit der Bestellbestätigung per E-Mail. Versand bzw. Bereitstellung erfolgt nach Zahlungseingang.</li>
+<li><strong>Barzahlung bei Abholung</strong> (nur bei Abholung).</li></ul>
+<h2>Preise</h2><p>Alle Preise in Euro. ${kuTxt} Die Preise gelten für die im Shop beschriebene Standardausführung. Sonderwünsche (Größe, Farbe, Gravur) werden vorab individuell angeboten.</p>
+<p>Fragen: ${kontaktBlock}</p>`, 'Lieferzeit/Zahlungsdetails an die tatsächliche Abwicklung anpassen.');
+
+legal('/widerruf/', 'Widerruf', 'Widerrufs&shy;belehrung', 'Widerrufsbelehrung und Muster-Widerrufsformular von Timestyle_Gravur für Verbraucher: 14 Tage Widerrufsrecht, Ausnahme für Anfertigungen nach Kundenwunsch.', `
+<h2 style="margin-top:0">Widerrufsrecht für Verbraucher</h2>
+<p>Verbraucher haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt 14 Tage ab dem Tag, an dem der Verbraucher oder ein von ihm benannter Dritter, der nicht Beförderer ist, die Waren in Besitz genommen hat. Bei mehreren Waren in einer Bestellung, die getrennt geliefert werden, ab dem Tag der Inbesitznahme der letzten Ware.</p>
+<p>Um das Widerrufsrecht auszuüben, ist eine eindeutige Erklärung (z. B. per Post oder E-Mail) an folgende Adresse zu richten:</p>
+<p>${kontaktBlock}</p>
+<p>Dazu kann das untenstehende Muster-Widerrufsformular verwendet werden, das aber nicht vorgeschrieben ist. Zur Wahrung der Widerrufsfrist genügt es, die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Frist abzusenden.</p>
+<h2>Folgen des Widerrufs</h2>
+<p>Wird der Vertrag widerrufen, werden alle erhaltenen Zahlungen einschließlich der Standard-Lieferkosten unverzüglich und spätestens binnen 14 Tagen ab Eingang der Widerrufserklärung zurückgezahlt. Die Rückzahlung kann verweigert werden, bis die Waren zurückerhalten wurden oder ein Nachweis über die Rücksendung erbracht ist. Die unmittelbaren Kosten der Rücksendung der Waren trägt der Verbraucher. Für einen Wertverlust der Waren muss der Verbraucher nur aufkommen, wenn dieser auf einen zur Prüfung der Beschaffenheit, Eigenschaften und Funktionsweise nicht notwendigen Umgang zurückzuführen ist.</p>
+<h2>Ausnahmen vom Widerrufsrecht</h2>
+<p>Kein Widerrufsrecht besteht bei Verträgen über Waren, die nicht vorgefertigt sind und für deren Herstellung eine individuelle Auswahl oder Bestimmung durch den Verbraucher maßgeblich ist oder die eindeutig auf die persönlichen Bedürfnisse des Verbrauchers zugeschnitten sind (§ 18 Abs. 1 Z 3 FAGG), z. B. Gravuren mit persönlichem Text oder nach Maß gefertigte Teile.</p>
+<h2>Muster-Widerrufsformular</h2>
+<p>(Wenn der Vertrag widerrufen werden soll, dieses Formular ausfüllen und zurücksenden.)</p>
+<p>An: ${kontaktBlock}<br>Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über den Kauf der folgenden Waren (*): ________<br>Bestellt am (*) / erhalten am (*): ________<br>Name des/der Verbraucher(s): ________<br>Anschrift des/der Verbraucher(s): ________<br>Datum: ________ · Unterschrift (nur bei Mitteilung auf Papier): ________<br><small>(*) Unzutreffendes streichen.</small></p>`, 'Muster-Widerrufsformular nach FAGG; Ausnahme § 18 Abs 1 Z 3 FAGG.');
+
+legal('/agb/', 'AGB', 'Allgemeine Geschäfts&shy;bedingungen', 'Allgemeine Geschäftsbedingungen von Timestyle_Gravur für den Verkauf von 3D-Druck-Artikeln und individuellen Anfertigungen.', `
+<h2 style="margin-top:0">1. Geltungsbereich</h2>
+<p>Diese Bedingungen gelten für alle Bestellungen über diese Website und für Aufträge an ${esc(cfg.name)} (${esc(cfg.inhaber)}, ${esc(cfg.strasse)}, ${esc(cfg.plz)} ${esc(cfg.ort)}). Maßgeblich ist die zum Zeitpunkt der Bestellung gültige Fassung.</p>
+<h2>2. Vertragsschluss</h2>
+<p>Die Darstellung der Artikel im Shop ist ein unverbindliches Angebot. Mit „Zahlungspflichtig bestellen“ gibt der Kunde ein verbindliches Angebot ab. Der Vertrag kommt zustande, wenn die Bestellung per E-Mail bestätigt wird.</p>
+<h2>3. Preise und Zahlung</h2>
+<p>Alle Preise in Euro. ${kuTxt} Hinzu kommen gegebenenfalls Versandkosten gemäß der Seite „Versand &amp; Zahlung“. Zahlung per Vorkasse oder, bei Abholung, in bar. Bei Vorkasse erfolgen Versand bzw. Bereitstellung nach Zahlungseingang.</p>
+<h2>4. Lieferung</h2>
+<p>Die voraussichtliche Lieferzeit wird in der Bestellbestätigung genannt. Bei individuell angefertigten Artikeln kann sie länger sein. Teillieferungen sind zulässig, sofern sie zumutbar sind.</p>
+<h2>5. Individuelle Anfertigungen</h2>
+<p>Gravuren, Laserschnitte und Teile nach Kundenwunsch werden nach den Vorgaben des Kunden gefertigt. Für die Richtigkeit von Texten, Maßen und Dateien ist der Kunde verantwortlich. 3D-gedruckte und gelaserte Teile können herstellungsbedingte Abweichungen in Farbe, Oberfläche und Maß aufweisen.</p>
+<h2>6. Eigentumsvorbehalt</h2><p>Die Ware bleibt bis zur vollständigen Bezahlung Eigentum von ${esc(cfg.name)}.</p>
+<h2>7. Gewährleistung und Haftung</h2>
+<p>Es gelten die gesetzlichen Gewährleistungsrechte. Für Schäden haftet ${esc(cfg.name)} bei Vorsatz und grober Fahrlässigkeit; gegenüber Verbrauchern gelten die gesetzlichen Haftungsregeln im zwingenden Umfang. Die Artikel sind keine Spielzeuge für Kinder unter drei Jahren, soweit sie Kleinteile enthalten.</p>
+<h2>8. Widerrufsrecht</h2><p>Verbrauchern steht ein Widerrufsrecht nach Maßgabe der <a href="${href('/widerruf/')}">Widerrufsbelehrung</a> zu.</p>
+<h2>9. Anwendbares Recht, Streitbeilegung</h2>
+<p>Es gilt österreichisches Recht. Zwingende Verbraucherschutzvorschriften des Staates, in dem der Verbraucher seinen gewöhnlichen Aufenthalt hat, bleiben unberührt. Verbraucher können die Online-Streitbeilegungsplattform der EU nutzen: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+<p>Stand: ${new Date().toLocaleDateString('de-AT', { month: 'long', year: 'numeric' })}</p>`, 'Besonders prüfen: Haftungsklausel, Spielzeug-Hinweis (Kleinteile, Produktsicherheit), Lieferzeiten.');
 
 /* ---------- Impressum ---------- */
 addPage({
@@ -392,6 +466,7 @@ addPage({
 <p>Verkauf von Kleingütern und Handel mit selbsterstellten Gütern.</p>
 <h3>Gewerbe</h3>
 <p>Gewerberechtlicher Verweis: § 19 GewO 1994<br>Nummer: 359103055</p>
+${cfg.kleinunternehmer ? '<h3>Umsatzsteuer</h3><p>Umsatzsteuerbefreit aufgrund der Kleinunternehmerregelung (§ 6 Abs. 1 Z 27 UStG).</p>' : ''}
 <h3>Online-Streitbeilegung</h3>
 <p>Verbraucher können Beschwerden an die Online-Streitbeilegungsplattform der EU richten: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
 <h3>Urheberrecht</h3>
@@ -411,10 +486,10 @@ addPage({
 <p>Diese Website kommt ohne Cookies, ohne Webanalyse, ohne Werbe- oder Tracking-Dienste und ohne eingebettete Inhalte Dritter (Karten, Videos, Schriftarten-Server) aus. Personenbezogene Daten werden nur verarbeitet, soweit dies für den Betrieb der Seite oder die Bearbeitung einer Anfrage erforderlich ist.</p>
 <h2>3. Hosting und Server-Logfiles</h2>
 <p>Die Website wird über GitHub Pages bereitgestellt (GitHub, Inc., USA). Beim Aufruf verarbeitet der Hosting-Anbieter technisch notwendige Daten, insbesondere IP-Adresse, Datum und Uhrzeit, aufgerufene Seite sowie Browser- und Geräteinformationen, um die Seite auszuliefern und die Sicherheit zu gewährleisten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren und stabilen Betrieb). Eine Übermittlung in die USA kann dabei nicht ausgeschlossen werden; Angaben zu den Garantien stellt der Anbieter in seinen Datenschutzinformationen bereit.</p>
-<h2>4. Anfrageliste und Kontaktaufnahme</h2>
-<p>Artikel, die zur Anfrage hinzugefügt werden, speichert der Browser lokal auf dem Gerät (Local Storage). Diese Daten werden nicht an einen Server übertragen und können über „Liste leeren“ oder durch Löschen der Websitedaten im Browser entfernt werden.</p>
-<p>Wer eine Anfrage sendet, öffnet damit das eigene E-Mail-Programm. Übermittelt werden die Angaben, die dort selbst abgeschickt werden (z. B. Name, E-Mail-Adresse, Telefonnummer, Nachricht, gewählte Artikel). Sie werden zur Bearbeitung der Anfrage und zur Vertragsanbahnung verwendet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO. Die Daten werden gelöscht, sobald sie nicht mehr benötigt werden und keine gesetzlichen Aufbewahrungspflichten entgegenstehen. Das E-Mail-Postfach wird über einen externen Anbieter (Google Gmail) betrieben.</p>
-<p>Gleiches gilt für Kontaktaufnahme per Telefon oder E-Mail.</p>
+<h2>4. Warenkorb, Bestellung und Kontaktaufnahme</h2>
+<p>Artikel im Warenkorb speichert der Browser lokal auf dem Gerät (Local Storage). Diese Daten werden erst mit dem Absenden einer Bestellung übermittelt. Sie lassen sich über „Warenkorb leeren“ oder durch Löschen der Websitedaten im Browser entfernen.</p>
+<p>Bei einer Bestellung oder einer Nachricht über das Kontaktformular werden die eingegebenen Daten verarbeitet: Name, E-Mail-Adresse, gegebenenfalls Telefonnummer und Lieferadresse, Bestelldaten und Nachricht. Zweck ist die Bearbeitung der Anfrage, die Vertragsabwicklung und Lieferung (Art. 6 Abs. 1 lit. b DSGVO) sowie die Erfüllung gesetzlicher Aufbewahrungspflichten, etwa nach der Bundesabgabenordnung (Art. 6 Abs. 1 lit. c DSGVO, in der Regel sieben Jahre). ${cfg.formEndpoint ? `Die Übermittlung erfolgt über den Formular-Dienst ${esc(cfg.formDienst || 'eines externen Anbieters')}, der die Daten in unserem Auftrag weiterleitet und dabei Daten in Drittländern verarbeiten kann. Alternativ ist der Kontakt jederzeit per E-Mail oder Telefon möglich.` : 'Die Übermittlung erfolgt über das eigene E-Mail-Programm des Absenders. Das E-Mail-Postfach wird über einen externen Anbieter (Google Gmail) betrieben.'}</p>
+<p>Zur Lieferung wird die Lieferadresse an das beauftragte Transportunternehmen weitergegeben. Gleiches gilt für Anfragen per Telefon oder E-Mail.</p>
 <h2>5. Externe Links</h2>
 <p>Die Seite enthält Links zu Facebook, Instagram und Google Maps. Es werden keine Plugins eingebunden. Erst nach einem Klick auf den Link werden Daten an den jeweiligen Anbieter übertragen, dessen Datenschutzbestimmungen dann gelten.</p>
 <h2>6. Rechte der betroffenen Personen</h2>
@@ -439,7 +514,7 @@ fs.writeFileSync(path.join(DIST, '.nojekyll'), '');
 if (cfg.customDomain) fs.writeFileSync(path.join(DIST, 'CNAME'), cfg.customDomain + '\n');
 
 for (const pg of pages) {
-  const html = head(pg) + `\n<body>\n${nav(pg.p)}\n${pg.body}\n${footer()}\n`;
+  const html = head(pg) + `\n<body>\n${nav(pg.p)}\n${pg.body}\n${footer(pg)}\n`;
   const out = pg.file ? path.join(DIST, pg.file) : path.join(DIST, pg.p, 'index.html');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, html);

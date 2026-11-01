@@ -16,10 +16,46 @@
   "instagram": "https://www.instagram.com/timestyle_gravur/",
   "gegruendet": 2020,
   "oeffnungszeiten": [
-    { "tage": "Montag bis Mittwoch", "schema": ["Monday", "Tuesday", "Wednesday"], "von": "09:00", "bis": "18:00" },
-    { "tage": "Donnerstag und Freitag", "schema": ["Thursday", "Friday"], "von": "09:00", "bis": "20:00" },
-    { "tage": "Samstag", "schema": ["Saturday"], "von": "09:00", "bis": "18:00" },
-    { "tage": "Sonntag", "schema": [], "von": null, "bis": null }
+    {
+      "tage": "Montag bis Mittwoch",
+      "schema": [
+        "Monday",
+        "Tuesday",
+        "Wednesday"
+      ],
+      "von": "09:00",
+      "bis": "18:00"
+    },
+    {
+      "tage": "Donnerstag und Freitag",
+      "schema": [
+        "Thursday",
+        "Friday"
+      ],
+      "von": "09:00",
+      "bis": "20:00"
+    },
+    {
+      "tage": "Samstag",
+      "schema": [
+        "Saturday"
+      ],
+      "von": "09:00",
+      "bis": "18:00"
+    },
+    {
+      "tage": "Sonntag",
+      "schema": [],
+      "von": null,
+      "bis": null
+    }
   ],
-  "ipArtikelAnzeigen": true
+  "ipArtikelAnzeigen": true,
+  "kleinunternehmer": true,
+  "versandPauschale": null,
+  "versandLand": "Österreich",
+  "formEndpoint": "",
+  "formAccessKey": "",
+  "formDienst": "",
+  "_hinweis2": "versandPauschale: Euro-Betrag (Zahl) für Versand innerhalb Österreichs. Solange null, bietet der Shop nur Abholung an. formEndpoint/formAccessKey/formDienst: optional, siehe README (Formular-Dienst, damit Bestellungen und Nachrichten ohne E-Mail-Programm ankommen)."
 }
