@@ -1,7 +1,7 @@
 {
   "_hinweis": "siteUrl = endgültige Adresse der Seite OHNE Slash am Ende (z. B. https://www.deine-domain.at). basePath nur setzen, wenn die Seite unter benutzername.github.io/REPO läuft (dann \"/REPO\"), sonst leer lassen. customDomain = Domain für die CNAME-Datei (leer lassen, wenn keine).",
   "siteUrl": "https://timelessstyle.github.io",
-  "basePath": "",
+  "basePath": "/Timestyle",
   "customDomain": "",
   "name": "Timestyle_Gravur",
   "inhaber": "Manuel Jarc",
