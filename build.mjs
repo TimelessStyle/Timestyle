@@ -9,6 +9,38 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(ROOT, 'src');
 const DIST = path.join(ROOT, 'dist');
+/* Auffangnetz: Wurden Dateien beim Hochladen auf GitHub ohne Ordner abgelegt (alles im Hauptordner), werden sie
+   hier anhand ihres Namens in die richtige Struktur kopiert. Bereits vorhandene Ordnerdateien bleiben unangetastet. */
+(function normalizeFlat() {
+  const rules = [
+    [/^style\.css$/, 'src/assets/css'],
+    [/^(main|hero-laser)\.js$/, 'src/assets/js'],
+    [/^(preise|produkte|stimmen|galerie-alt)\.json$/, 'data'],
+    [/^gal-\d+\.webp$/, 'src/assets/img/galerie'],
+    [/^(3d-druck|lasergravur|laserschnitt|lasergravur-holzbox)\.webp$/, 'src/assets/img/tiles'],
+    [/^(shop|ueber-uns)\.webp$/, 'src/assets/img/heros'],
+    [/^manuel-jarc\.webp$/, 'src/assets/img/team'],
+    [/^(logo|og-image)\.(png|webp|svg)$/, 'src/assets/img'],
+    [/^(facebook|instagram)\.png$/, 'src/assets/img/social'],
+    [/^(apple-touch-icon\.png|favicon\.svg|icon-192\.png|icon-512\.png|site\.webmanifest)$/, 'src/static'],
+    [/^(bildnamen\.txt|inhaltsinventar\.md)$/, 'docs'],
+    [/^(make-icons|qa)\.mjs$/, 'tools'],
+    [/^[a-z0-9-]+\.pdf$/, 'src/downloads'],
+    [/^[a-z0-9-]+\.(webp|jpe?g|png|avif)$/, 'src/assets/img/produkte'],
+  ];
+  let moved = 0;
+  for (const e of fs.readdirSync(ROOT, { withFileTypes: true })) {
+    if (!e.isFile()) continue;
+    const r = rules.find(([re]) => re.test(e.name));
+    if (!r) continue;
+    const dst = path.join(ROOT, r[1], e.name);
+    if (fs.existsSync(dst)) continue;
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    fs.copyFileSync(path.join(ROOT, e.name), dst); moved++;
+  }
+  if (moved) console.log(`Hinweis: ${moved} Dateien lagen ohne Ordner im Hauptverzeichnis und wurden automatisch einsortiert.`);
+})();
+
 for (const f of ['site.config.json', 'data/produkte.json', 'data/preise.json', 'data/stimmen.json', 'src/assets/css/style.css', 'src/assets/js/main.js']) {
   if (!fs.existsSync(path.join(ROOT, f))) { console.error(`FEHLER: Datei fehlt: ${f}\nBuild läuft in: ${ROOT}\nInhalt: ${fs.readdirSync(ROOT).join(', ')}`); process.exit(1); }
 }
