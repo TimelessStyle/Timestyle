@@ -1,7 +1,0 @@
-{
-  "name": "timestyle-gravur-website",
-  "private": true,
-  "type": "module",
-  "scripts": { "build": "node build.mjs", "qa": "node tools/qa.mjs" },
-  "engines": { "node": ">=18" }
-}
