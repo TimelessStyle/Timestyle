@@ -52,7 +52,7 @@
   ],
   "ipArtikelAnzeigen": true,
   "kleinunternehmer": true,
-  "versandPauschale": null,
+  "versandPauschale": 7.95,
   "versandLand": "Österreich",
   "formEndpoint": "",
   "formAccessKey": "",

@@ -29,7 +29,7 @@ Startseite (Laser-Animation, Sortiment-Karussell) · Leistungen & Preise · Shop
 - Zustellung der Bestellung, zwei Wege:
   1. **Ohne Einrichtung:** Der Button öffnet das E-Mail-Programm des Kunden mit fertigem Bestelltext. Erst das Absenden löst die Bestellung aus. Schwäche: Kunden ohne eingerichtetes Mailprogramm (viele am Handy) kommen nicht weiter. Es gibt einen Knopf „Bestelltext kopieren“ als Ausweg.
   2. **Empfohlen: Formular-Dienst.** Bestellung und Kontaktformular werden direkt zugestellt, ohne Mailprogramm. Kostenloses Konto z. B. bei Web3Forms (`https://api.web3forms.com/submit`, Access-Key aus dem Konto) oder Formspree (Endpunkt-URL aus dem Konto). In `site.config.json` eintragen: `formEndpoint`, bei Web3Forms zusätzlich `formAccessKey`, und `formDienst` mit dem Namen (erscheint in der Datenschutzerklärung). Datenschutz mit dem Anbieter prüfen (Auftragsverarbeitung).
-- **Versand:** `versandPauschale` (Zahl in Euro) in `site.config.json` setzen. Solange sie `null` ist, bietet der Shop nur Abholung an.
+- **Versand:** `versandPauschale` in `site.config.json` (aktuell 7,95 €). Grundlage: Österreichische Post, Paket Österreich bis 2 kg, Tarif gültig ab 1. Juli 2026 = 7,94 € (Post-Tarifblatt). GLS Österreich startet für Privatversender ab ca. 3 €, die Staffel für größere Pakete habe ich nicht vollständig gefunden. DHL bietet in Österreich für Privatversender kein Inlandspaket (DHL Paket ist ein deutsches Produkt, DHL Express richtet sich an Firmenkunden). Wert jederzeit ändern. Ist sie `null`, gibt es nur Abholung.
 - **Preise:** Die Zahlen in `data/produkte.json` sind vorerst die bisherigen „ab“-Preise als Festpreis der Standardausführung. Anpassen: Zahl ändern, neu bauen. Varianten (z. B. Klein/Groß) über `"varianten": [["Klein", 6], ["Groß", 12]]`.
 - **Kleinunternehmer:** `kleinunternehmer: true` blendet den Hinweis nach § 6 Abs. 1 Z 27 UStG im Warenkorb, in den AGB und im Impressum ein. Bei `false` erscheint „inkl. Umsatzsteuer“.
 
@@ -59,7 +59,7 @@ Automatischer Test (Seiten, Warenkorb, Formulare, Laser): `npm i -D playwright`,
 
 ## Bilder
 
-Ohne Bilder zeigt der Shop Platzhalter-Kacheln.
+Eingebaut sind Logo, Porträt, drei Themenbilder (Startseite, Über uns) und 13 Galeriebilder aus der alten Seite, jeweils mit Alt-Text. Die Produktfotos der 3D-Druckpalette fehlen noch: bis dahin zeigt der Shop Platzhalter-Kacheln.
 
 - Produktfotos: `src/assets/img/produkte/<name>.webp` (oder `.jpg`/`.png`), Namen siehe `docs/bildnamen.txt`. Empfohlen 4:3, ca. 1200 × 900 px, unter 200 KB. Alt-Texte setzt der Build automatisch („Name – Kategorie von Timestyle_Gravur“), bessere Texte über `"alt"` in `data/produkte.json`.
 - Logo: `src/assets/img/logo.svg` (oder `.png`).

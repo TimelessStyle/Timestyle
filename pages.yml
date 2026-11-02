@@ -21,10 +21,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node build.mjs
+      - name: Projektordner finden und bauen
+        run: |
+          echo "Repo-Inhalt:"; ls -la
+          B=$(find . -maxdepth 3 -name build.mjs -not -path '*/node_modules/*' | head -1)
+          if [ -z "$B" ]; then echo "FEHLER: build.mjs wurde im Repository nicht gefunden."; exit 1; fi
+          DIR=$(dirname "$B")
+          echo "Projektordner: $DIR"
+          cd "$DIR"
+          node build.mjs
+          echo "DIST_DIR=$(pwd)/dist" >> "$GITHUB_ENV"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: ${{ env.DIST_DIR }}
       - id: deployment
         uses: actions/deploy-pages@v4

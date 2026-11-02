@@ -112,7 +112,7 @@ p { margin: 0 0 1em; }
 .aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; will-change: transform; }
 .b1 { width: 52vw; height: 52vw; max-width: 760px; max-height: 760px; left: -12%; top: -18%; background: radial-gradient(circle, #e3b152 0%, rgba(227, 177, 82, 0) 68%); animation: drift1 22s ease-in-out infinite alternate; }
-.b2 { width: 46vw; height: 46vw; max-width: 680px; max-height: 680px; right: -10%; top: 6%; background: radial-gradient(circle, #8d6bd6 0%, rgba(141, 107, 214, 0) 68%); opacity: .38; animation: drift2 26s ease-in-out infinite alternate; }
+.b2 { width: 46vw; height: 46vw; max-width: 680px; max-height: 680px; right: -10%; top: 6%; background: radial-gradient(circle, #b3202f 0%, rgba(179, 32, 47, 0) 68%); opacity: .42; animation: drift2 26s ease-in-out infinite alternate; }
 .b3 { width: 40vw; height: 40vw; max-width: 600px; max-height: 600px; left: 28%; bottom: -26%; background: radial-gradient(circle, #d6694f 0%, rgba(214, 105, 79, 0) 68%); opacity: .4; animation: drift3 24s ease-in-out infinite alternate; }
 .b4 { width: 30vw; height: 30vw; max-width: 460px; max-height: 460px; right: 18%; bottom: 4%; background: radial-gradient(circle, #cfd2d8 0%, rgba(207, 210, 216, 0) 68%); opacity: .22; animation: drift1 30s ease-in-out infinite alternate-reverse; }
 @keyframes drift1 { to { transform: translate3d(8vw, 6vh, 0) scale(1.15); } }
@@ -419,3 +419,24 @@ select.var, .field select { font: inherit; font-size: .9rem; padding: 8px 10px; 
 .contact-form-wrap .form-card { position: static; }
 .btn[disabled] { opacity: .6; cursor: progress; transform: none; }
 @media (max-width: 900px) { .contact-form-wrap { grid-template-columns: 1fr; } .two-f { grid-template-columns: 1fr; } }
+
+/* Fotos in Kacheln und Karten */
+.tile.has-img { color: #fff; background: #111; }
+.tile .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.4s var(--ease); }
+.tile.has-img::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(8, 8, 10, .08) 0%, rgba(8, 8, 10, .55) 55%, rgba(8, 8, 10, .9) 100%); }
+.tile.has-img:hover .bg { transform: scale(1.07); }
+.tile.has-img h3, .tile.has-img p { color: #fff; text-shadow: 0 2px 14px rgba(0, 0, 0, .5); }
+.tile.has-img .price, .tile.has-img .link-more, .tile.has-img .ico { color: var(--gold-2) !important; -webkit-text-fill-color: currentColor; background: none; }
+.value .vimg { width: calc(100% + 56px); max-width: none; margin: -28px -28px 20px; height: 170px; object-fit: cover; border-radius: var(--radius-s) var(--radius-s) 0 0; }
+.brand img { border-radius: 50%; object-fit: cover; }
+.d0 { --d: 0.00s; }
+.d1 { --d: 0.08s; }
+.d2 { --d: 0.16s; }
+.d3 { --d: 0.24s; }
+.d4 { --d: 0.32s; }
+.d5 { --d: 0.40s; }
+.d6 { --d: 0.48s; }
+.d7 { --d: 0.56s; }
+.d8 { --d: 0.64s; }
+.d9 { --d: 0.72s; }
+figure.pcard { margin: 0; }

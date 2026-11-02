@@ -9,6 +9,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(ROOT, 'src');
 const DIST = path.join(ROOT, 'dist');
+for (const f of ['site.config.json', 'data/produkte.json', 'data/preise.json', 'data/stimmen.json', 'src/assets/css/style.css', 'src/assets/js/main.js']) {
+  if (!fs.existsSync(path.join(ROOT, f))) { console.error(`FEHLER: Datei fehlt: ${f}\nBuild läuft in: ${ROOT}\nInhalt: ${fs.readdirSync(ROOT).join(', ')}`); process.exit(1); }
+}
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8'));
 const read = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8'));
 const preise = read('preise.json');
@@ -139,9 +142,12 @@ ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
 <h1 class="display">${h1}</h1>${lead ? `<p class="lead">${lead}</p>` : ''}${extra}</div></section>`;
 }
 
+const tileImg = (n, alt) => exists(`assets/img/tiles/${n}.webp`) ? `<img class="bg" src="${href('/assets/img/tiles/' + n + '.webp')}" width="1000" height="750" alt="${esc(alt)}" loading="lazy" decoding="async">` : '';
+const vImg = (n, alt) => exists(`assets/img/tiles/${n}.webp`) ? `<img class="vimg" src="${href('/assets/img/tiles/' + n + '.webp')}" width="1000" height="750" alt="${esc(alt)}" loading="lazy" decoding="async">` : '';
+const hasT = (n) => exists(`assets/img/tiles/${n}.webp`) ? ' has-img' : '';
 const pages = [];
 function addPage(o) { pages.push(o); }
-const R = (i = 0) => `reveal" style="--d:${(i * 0.08).toFixed(2)}s`;
+const R = (i = 0) => `reveal d${Math.min(i, 9)}`;
 
 /* ---------- Daten aufbereiten ---------- */
 const seen = new Set();
@@ -211,9 +217,9 @@ addPage({
 <div class="center ${R()}"><p class="eyebrow">Was wir machen</p><h2 class="h2" id="katalog">Unser Produktkatalog</h2>
 <p class="lead">Technisch gute Lösungen mit präzisen, modernen und alltagstauglichen Designs, für Innovatives, Zeitloses oder besondere Anlässe.</p></div>
 <div class="bento">
-<a class="tile ink t-half ${R(0)}" href="${href('/shop/')}">${icon('cube')}<h3>3D-Druck</h3><p>Maßgeschneiderte, detailgetreue Drucke für individuelle Projekte.</p><span class="price gold-text">ab 5 €</span><span class="link-more">Zum Shop</span></a>
-<a class="tile wood t-half ${R(1)}" href="${href('/leistungen-preise/#lasergravur')}">${icon('pen')}<h3>Lasergravur</h3><p>Hochwertige Gravuren für persönliche und geschäftliche Zwecke.</p><span class="price" style="color:var(--gold-1)">ab 10 €</span><span class="link-more" style="color:var(--gold-1)">Preise ansehen</span></a>
-<a class="tile silver t-full ${R(2)}" href="${href('/leistungen-preise/#laserschneiden')}">${icon('laser')}<h3>Laserschnitt</h3><p>Präzise Schnitte für verschiedene Materialien und Anwendungen.</p><span class="price">ab 5 €</span><span class="link-more" style="color:var(--wood-3)">Preise ansehen</span></a>
+<a class="tile ink${hasT('3d-druck')} t-half ${R(0)}" href="${href('/shop/')}">${tileImg('3d-druck', '3D-gedrucktes Objekt im Bauraum eines 3D-Druckers')}${icon('cube')}<h3>3D-Druck</h3><p>Maßgeschneiderte, detailgetreue Drucke für individuelle Projekte.</p><span class="price gold-text">ab 5 €</span><span class="link-more">Zum Shop</span></a>
+<a class="tile wood${hasT('lasergravur')} t-half ${R(1)}" href="${href('/leistungen-preise/#lasergravur')}">${tileImg('lasergravur', 'Lasergravur eines QR-Codes auf Holz, der blaue Laser ist im Bild zu sehen')}${icon('pen')}<h3>Lasergravur</h3><p>Hochwertige Gravuren für persönliche und geschäftliche Zwecke.</p><span class="price" style="color:var(--gold-1)">ab 10 €</span><span class="link-more" style="color:var(--gold-1)">Preise ansehen</span></a>
+<a class="tile silver${hasT('laserschnitt')} t-full ${R(2)}" href="${href('/leistungen-preise/#laserschneiden')}">${tileImg('laserschnitt', 'Lasergeschnittene Holzteile mit Wabenmuster und QR-Code-Gravur')}${icon('laser')}<h3>Laserschnitt</h3><p>Präzise Schnitte für verschiedene Materialien und Anwendungen.</p><span class="price">ab 5 €</span><span class="link-more">Preise ansehen</span></a>
 </div></div></section>
 
 <section class="section dark" aria-labelledby="ablauf">${blobs}
@@ -311,13 +317,13 @@ addPage({
 <p>Das Projekt begann ${cfg.gegruendet} während der Covid-Pandemie und ist seitdem stetig gewachsen. Aus einem kleinen Vorhaben wurde eine Leidenschaft, die geteilt werden soll.</p>
 <p>Ideen und Projekte lassen sich gemeinsam besprechen. Dabei entstehen kreative Lösungen, die genau zur Idee passen.</p>
 <p><a class="btn btn-dark" href="${href('/kontakt/#formular')}">Projekt besprechen</a></p></div>
-<div class="${R(1)}"><div class="ph-photo wood">${teamImg ? `<img src="${href(teamImg)}" width="800" height="1000" alt="Manuel Jarc, Inhaber von Timestyle_Gravur, in der Werkstatt" loading="lazy">` : `<span class="ini" aria-hidden="true">MJ</span>`}</div></div>
+<div class="${R(1)}"><div class="ph-photo wood">${teamImg ? `<img src="${href(teamImg)}" width="800" height="1000" alt="Porträt von Manuel Jarc, Inhaber von Timestyle_Gravur" loading="lazy">` : `<span class="ini" aria-hidden="true">MJ</span>`}</div></div>
 </div></section>
 <section class="section gray"><div class="wrap"><div class="center ${R()}"><p class="eyebrow">Unser Angebot</p><h2 class="h2">Drei Verfahren. Ein Ansprechpartner.</h2></div>
 <div class="values">
-<div class="value ${R(0)}">${icon('cube', '')}<h3>3D-Druck</h3><p>Maßgeschneiderte, detailgetreue Drucke für individuelle Projekte.</p></div>
-<div class="value ${R(1)}">${icon('laser', '')}<h3>Laserschnitt</h3><p>Präzise Schnitte für verschiedene Materialien und Anwendungen.</p></div>
-<div class="value ${R(2)}">${icon('pen', '')}<h3>Lasergravur</h3><p>Hochwertige Gravuren für persönliche und geschäftliche Zwecke.</p></div></div>
+<div class="value ${R(0)}">${vImg('3d-druck', '3D-gedrucktes Objekt im Bauraum eines 3D-Druckers')}${icon('cube', '')}<h3>3D-Druck</h3><p>Maßgeschneiderte, detailgetreue Drucke für individuelle Projekte.</p></div>
+<div class="value ${R(1)}">${vImg('laserschnitt', 'Lasergeschnittene Holzteile mit Wabenmuster und QR-Code-Gravur')}${icon('laser', '')}<h3>Laserschnitt</h3><p>Präzise Schnitte für verschiedene Materialien und Anwendungen.</p></div>
+<div class="value ${R(2)}">${vImg('lasergravur', 'Lasergravur eines QR-Codes auf Holz, der blaue Laser ist im Bild zu sehen')}${icon('pen', '')}<h3>Lasergravur</h3><p>Hochwertige Gravuren für persönliche und geschäftliche Zwecke.</p></div></div>
 <div class="values">${vals.map((v, i) => `<div class="value ${R(i)}">${icon(v[0], '')}<h3>${esc(v[1])}</h3><p>${esc(v[2])}</p></div>`).join('')}</div></div></section>
 <section class="section dark">${blobs}<div class="wrap center" style="position:relative;z-index:2"><p class="eyebrow ${R()}">Unser Team</p><h2 class="h2 ${R(1)}">${esc(cfg.inhaber)}</h2><p class="lead ${R(2)}">Ansprechpartner für Beratung, Design und Fertigung.</p><div class="cta-row" style="margin-top:26px"><a class="btn btn-gold" href="${href('/kontakt/')}">Kontakt aufnehmen</a></div></div></section></main>`,
 });
@@ -332,7 +338,7 @@ addPage({
   ld: { '@context': 'https://schema.org', '@graph': [crumbsLd('/kundenstimmen/', 'Kundenstimmen')] },
   body: `<main id="main">${pageHero('Kundenstimmen <span class="gold-text">&amp; Galerie</span>', 'Erfahrungen von Kunden und eine Auswahl gefertigter Produkte.', 'Kundenstimmen', 'Galerie & Kundenstimmen')}
 <section class="section dark" style="padding-top:20px"><div class="wrap"><h2 class="sr-only">Kundenstimmen</h2><div class="quotes" style="margin-top:0">${stimmen.map((s, i) => `<figure class="quote ${R(i)}"><blockquote>${esc(s.zitat)}</blockquote><p>${esc(s.text)}</p><figcaption>${esc(s.name)}</figcaption></figure>`).join('')}</div></div></section>
-${gal.length ? `<section class="section"><div class="wrap"><div class="center ${R()}"><p class="eyebrow">Galerie</p><h2 class="h2">Unsere Produkte</h2></div><div class="pgrid" style="margin-top:44px">${gal.map((f, i) => `<figure class="pcard ${R(i % 4)}" style="margin:0"><div class="pimg"><img src="${href('/assets/img/galerie/' + f)}" alt="${esc(galAlt[f] || 'Gefertigtes Produkt von Timestyle_Gravur')}" width="800" height="600" loading="lazy" decoding="async"></div></figure>`).join('')}</div></div></section>` : ''}
+${gal.length ? `<section class="section"><div class="wrap"><div class="center ${R()}"><p class="eyebrow">Galerie</p><h2 class="h2">Unsere Produkte</h2></div><div class="pgrid" style="margin-top:44px">${gal.map((f, i) => `<figure class="pcard ${R(i % 4)}"><div class="pimg"><img src="${href('/assets/img/galerie/' + f)}" alt="${esc(galAlt[f] || 'Gefertigtes Produkt von Timestyle_Gravur')}" width="800" height="600" loading="lazy" decoding="async"></div></figure>`).join('')}</div></div></section>` : ''}
 <section class="section gray"><div class="wrap center ${R()}"><h2 class="h2" style="margin-bottom:16px">Als Nächstes dein Projekt.</h2><div class="cta-row" style="margin-top:22px"><a class="btn btn-dark" href="${href('/kontakt/#formular')}">Anfrage senden</a><a class="btn btn-line" href="${href('/shop/')}">Zum Shop</a></div></div></section></main>`,
 });
 
