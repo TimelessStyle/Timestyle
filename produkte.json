@@ -10,42 +10,60 @@
      "Harry Potter Lampe (Heiligtümer des Todes 1)",
      35,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Beleuchtete Lampe mit dem Symbol der Heiligtümer des Todes, 3D-gedruckt."
      }
     ],
     [
      "Harry Potter Lampe (Heiligtümer des Todes 2)",
      35,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Runde, beleuchtete Lampe mit Schattenriss-Szene, 3D-gedruckt."
      }
     ],
     [
      "Harry Potter Lampe (Bahnsteig 9 3/4)",
      35,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Leuchtschild im Look des Bahnsteigs 9 3/4, 3D-gedruckt."
      }
     ],
     [
      "Meditierender Sensenmann LED Kerzenhalter",
-     15
+     15,
+     {
+      "beschreibung": "Kerzenhalter mit meditierender Figur, mit LED beleuchtet."
+     }
     ],
     [
      "Schwebendes Teelicht 1",
-     15
+     15,
+     {
+      "beschreibung": "Halter, in dem das Teelicht zu schweben scheint."
+     }
     ],
     [
      "Schwebendes Teelicht 2",
-     15
+     15,
+     {
+      "beschreibung": "Zwei Rahmen, in denen die Teelichter zu schweben scheinen."
+     }
     ],
     [
      "HexaLeaf LED Leuchtplatten",
-     25
+     25,
+     {
+      "beschreibung": "Sechseckige LED-Leuchtplatten für die Wand."
+     }
     ],
     [
      "Würfellampe",
-     30
+     30,
+     {
+      "beschreibung": "Würfelförmige Lampe, durch deren Fugen warmes Licht scheint."
+     }
     ]
    ]
   },
@@ -56,70 +74,104 @@
    "artikel": [
     [
      "Spielkarten Schiebekasten",
-     8
+     8,
+     {
+      "beschreibung": "Kasten für Spielkarten mit Schiebefunktion."
+     }
     ],
     [
      "Drachen Ei mit Babydrachen",
-     10
+     10,
+     {
+      "beschreibung": "Ei mit einem beweglichen Babydrachen im Inneren."
+     }
     ],
     [
      "Reise Balance Tetris Box",
-     8
+     8,
+     {
+      "beschreibung": "Reisebox mit Balance-Tetris-Steinen zum Stapeln."
+     }
     ],
     [
      "Reise Balance Tetris",
-     20
+     20,
+     {
+      "beschreibung": "Balance-Tetris zum Mitnehmen: Steine geschickt stapeln."
+     }
     ],
     [
      "Mini Balance Reise Tetris",
-     10
+     10,
+     {
+      "beschreibung": "Kleine Reiseversion des Balance-Tetris."
+     }
     ],
     [
      "Vier gewinnt Vortex",
-     20
+     20,
+     {
+      "beschreibung": "Vier gewinnt im Vortex-Design zum Selbstspielen."
+     }
     ],
     [
      "Croptex zum selbstbauen",
-     16
+     16,
+     {
+      "beschreibung": "Rätselzylinder (Cryptex) zum Selbstzusammenbauen."
+     }
     ],
     [
      "Shut the Box Spiel",
-     15
+     15,
+     {
+      "beschreibung": "Klassisches Würfelspiel mit Klappzahlen."
+     }
     ],
     [
      "Stapelstein Spielscheibe Balance",
-     15
+     15,
+     {
+      "beschreibung": "Geschicklichkeitsspiel: Kugeln auf der Scheibe balancieren."
+     }
     ],
     [
      "Stapelstein Spielscheibe Labyrinth",
-     15
+     15,
+     {
+      "beschreibung": "Geschicklichkeitsspiel mit herzförmigem Labyrinth."
+     }
     ],
     [
      "JoyCon-Griff für Switch (Inspiriert Super Mario)",
      15,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Griff in Lenkradform für die Joy-Con der Nintendo Switch."
      }
     ],
     [
      "JoyCon-Lenkrad",
      12,
      {
-      "alt": "Joycon Switch Lenkrad"
+      "alt": "Joycon Switch Lenkrad",
+      "beschreibung": "Lenkrad-Aufsatz für die Joy-Con der Nintendo Switch."
      }
     ],
     [
      "Switch Spielerahmen",
      10,
      {
-      "alt": "Nintendo Switch Spielebilderrahmen"
+      "alt": "Nintendo Switch Spielebilderrahmen",
+      "beschreibung": "Wandrahmen für Nintendo-Switch-Spielehüllen."
      }
     ],
     [
      "Switch Spielehalter",
      10,
      {
-      "alt": "Nintendo Switch Spielehalter Pilz"
+      "alt": "Nintendo Switch Spielehalter Pilz",
+      "beschreibung": "Pilzförmiger Halter für Switch-Spiele."
      }
     ],
     [
@@ -127,91 +179,121 @@
      80,
      {
       "ip": 1,
-      "alt": "Nintendo Switch Super Mario Pflanze Halter"
+      "alt": "Nintendo Switch Super Mario Pflanze Halter",
+      "beschreibung": "Dekorative Pflanze als Halter für Nintendo Switch und Joy-Con."
      }
     ],
     [
      "Geschicklichkeits Tetris",
      15,
      {
-      "alt": "Balance Tetris"
+      "alt": "Balance Tetris",
+      "beschreibung": "Geschicklichkeitsspiel mit Tetris-Steinen."
      }
     ],
     [
      "Tetris Transportbox",
-     10
+     10,
+     {
+      "beschreibung": "Transportbox für die Tetris-Steine."
+     }
     ],
     [
      "Dracheneiersammlung",
-     8
+     8,
+     {
+      "beschreibung": "Sammlung von Drachen-Eiern mit kleinen Drachen darin."
+     }
     ],
     [
      "Drache mit Ei (beweglich)",
-     10
+     10,
+     {
+      "beschreibung": "Beweglicher Drache mit passendem Ei."
+     }
     ],
     [
      "Schlüsselanhängerdrache Flexi",
-     5
+     5,
+     {
+      "beschreibung": "Beweglicher Drache als Schlüsselanhänger."
+     }
     ],
     [
      "Goldener Drache mit Ei (beweglich)",
-     10
+     10,
+     {
+      "beschreibung": "Goldfarbener, beweglicher Drache mit Ei."
+     }
     ],
     [
      "Flexi Taschentiere",
-     5
+     5,
+     {
+      "beschreibung": "Bewegliche Axolotl-Figuren mit Schlüsselring."
+     }
     ],
     [
      "Flexi Sternendrachen",
-     5
+     5,
+     {
+      "beschreibung": "Bewegliche Drachenfiguren mit Sternenmuster."
+     }
     ],
     [
      "Kettenhund (Super Mario) Schlüsselanhänger",
      4,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Schlüsselanhänger in Form eines Kettenhunds."
      }
     ],
     [
      "Onix (Pokémon) Schlüsselanhänger",
      4,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Beweglicher Schlüsselanhänger mit Onix aus Pokémon."
      }
     ],
     [
      "Mew (Pokémon) Schlüsselanhänger",
      4,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Beweglicher Schlüsselanhänger mit Mew aus Pokémon."
      }
     ],
     [
      "Skelett (Minecraft) Schlüsselanhänger",
      4,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Beweglicher Schlüsselanhänger mit Minecraft-Skelett."
      }
     ],
     [
      "IQ Game mit Box",
      12,
      {
-      "anleitung": "iq-game-mit-box.pdf"
+      "anleitung": "iq-game-mit-box.pdf",
+      "beschreibung": "Knobelspiel mit bunten Stäben und Aufbewahrungsbox. Anleitung als Download."
      }
     ],
     [
      "IQ Game Sticks (Variante 1)",
      10,
      {
-      "anleitung": "iq-game-sticks-10.pdf"
+      "anleitung": "iq-game-sticks-10.pdf",
+      "beschreibung": "Knobelspiel mit bunten Stäben. Anleitung als Download."
      }
     ],
     [
      "IQ Game Sticks (Variante 2)",
      8,
      {
-      "anleitung": "iq-game-sticks-8.pdf"
+      "anleitung": "iq-game-sticks-8.pdf",
+      "beschreibung": "Knobelspiel mit bunten Stäben, kleinere Variante. Anleitung als Download."
      }
     ]
    ]
@@ -225,42 +307,48 @@
      "Streudeko Taufe, Kommunion, Firmung",
      5,
      {
-      "alt": "Streudeko Taufe"
+      "alt": "Streudeko Taufe",
+      "beschreibung": "Streudeko in Fischform für Taufe, Kommunion und Firmung."
      }
     ],
     [
      "Tischdeko Taufe, Kommunion, Firmung mit Glas",
      3,
      {
-      "einheit": "pro Stück"
+      "einheit": "pro Stück",
+      "beschreibung": "Fisch als Tischdeko mit Reagenzglas für Blumen, pro Stück."
      }
     ],
     [
      "Tischdeko mit Glas (8 €)",
      8,
      {
-      "einheit": "pro Stück"
+      "einheit": "pro Stück",
+      "beschreibung": "Tischdeko mit Reagenzglas und Schriftzug für Feste, pro Stück."
      }
     ],
     [
      "Tischdeko mit Glas (6 €)",
      6,
      {
-      "einheit": "pro Stück"
+      "einheit": "pro Stück",
+      "beschreibung": "Tischdeko mit Reagenzglas, Fisch und Schriftzug „TAUFE“, pro Stück."
      }
     ],
     [
      "Diverse Cake Topper 1",
      15,
      {
-      "einheit": "pro Stück"
+      "einheit": "pro Stück",
+      "beschreibung": "Cake Topper zur Taufe mit Taube und Name, pro Stück."
      }
     ],
     [
      "Diverse Cake Topper 2",
      15,
      {
-      "einheit": "pro Stück"
+      "einheit": "pro Stück",
+      "beschreibung": "Cake Topper zur Taufe mit Fisch, Datum und Name, pro Stück."
      }
     ]
    ]
@@ -272,15 +360,24 @@
    "artikel": [
     [
      "Osterhasen Ei Deko",
-     8
+     8,
+     {
+      "beschreibung": "Geriffelte Osterhasen-Eier als Dekoration."
+     }
     ],
     [
      "Osterhasen Ei Teelicht",
-     7
+     7,
+     {
+      "beschreibung": "Osterhasen-Eier als Teelichthalter mit Lichtmuster."
+     }
     ],
     [
      "Osterhasen ÜEi",
-     5
+     5,
+     {
+      "beschreibung": "Osterhasen-Halter für Überraschungseier."
+     }
     ],
     [
      "Osterhasenversteck",
@@ -295,20 +392,30 @@
         "Groß",
         12
        ]
-      ]
+      ],
+      "beschreibung": "Osterei mit Hasenohren zum Befüllen und Verstecken, in Klein und Groß."
      }
     ],
     [
      "Hasendeko",
-     4
+     4,
+     {
+      "beschreibung": "Geriffelte Hasenfiguren als Osterdekoration."
+     }
     ],
     [
      "Osterhasenversteck ÜEi",
-     10
+     10,
+     {
+      "beschreibung": "Versteck-Ei für Überraschungseier."
+     }
     ],
     [
      "Osterhasendeko",
-     4
+     4,
+     {
+      "beschreibung": "Geriffelte Hasenfiguren in Pastellfarben als Osterdekoration."
+     }
     ]
    ]
   },
@@ -325,70 +432,116 @@
    "artikel": [
     [
      "Herzskulptur",
-     12
+     12,
+     {
+      "beschreibung": "Skulptur einer sitzenden Figur mit einem Herz in der Hand."
+     }
     ],
     [
      "Hören, Sagen, Sehen (Skulptur)",
-     18
+     18,
+     {
+      "beschreibung": "Drei Figuren in der Pose „nichts hören, nichts sagen, nichts sehen“."
+     }
     ],
     [
      "Vase 1",
-     6
+     6,
+     {
+      "beschreibung": "Vase mit spiralförmigem Muster."
+     }
     ],
     [
      "Vase 2",
-     6
+     6,
+     {
+      "beschreibung": "Schlanke Vase mit senkrechten Rillen."
+     }
     ],
     [
      "Räucherstäbchenhalter",
-     10
+     10,
+     {
+      "beschreibung": "Halter für Räucherstäbchen."
+     }
     ],
     [
      "Vase 3",
-     8
+     8,
+     {
+      "beschreibung": "Vase mit gewundenem Spiralmuster."
+     }
     ],
     [
      "Snackschale mit Auffangbehälter",
-     12
+     12,
+     {
+      "beschreibung": "Schale mit Auffangbehälter für Snacks."
+     }
     ],
     [
      "Vasen klein",
-     4
+     4,
+     {
+      "beschreibung": "Kleine Vasen, ideal für Trockenblumen und Gräser."
+     }
     ],
     [
      "Vase groß",
-     10
+     10,
+     {
+      "beschreibung": "Große Vase mit gewundenem Spiralmuster."
+     }
     ],
     [
      "Legoblumen Vase",
-     15
+     15,
+     {
+      "beschreibung": "Vase, passend zu Lego-Blumensträußen."
+     }
     ],
     [
      "Brillen Organizer",
-     35
+     35,
+     {
+      "beschreibung": "Ablage zum Aufbewahren von Brillen."
+     }
     ],
     [
      "Schale mit Geheimfach",
      20,
      {
-      "alt": "Schale mit Geheimfach"
+      "alt": "Schale mit Geheimfach",
+      "beschreibung": "Schale mit verstecktem Fach unter dem Deckel."
      }
     ],
     [
      "Design Behälter",
-     14
+     14,
+     {
+      "beschreibung": "Behälter mit Wellenmuster und Deckel."
+     }
     ],
     [
      "Lego Vase",
-     8
+     8,
+     {
+      "beschreibung": "Vase für Lego-Blumen."
+     }
     ],
     [
      "Design Polygon Vase",
-     16
+     16,
+     {
+      "beschreibung": "Vase im Polygon-Design."
+     }
     ],
     [
      "Design Skulptur",
-     45
+     45,
+     {
+      "beschreibung": "Skulptur in Form einer geteilten Büste."
+     }
     ]
    ]
   },
@@ -399,51 +552,70 @@
    "artikel": [
     [
      "Ballonhund Anhänger",
-     6
+     6,
+     {
+      "beschreibung": "Anhänger in Ballonhund-Form, hier als Ohrhänger."
+     }
     ],
     [
      "Herzen der Ewigen Bewegung",
-     4
+     4,
+     {
+      "beschreibung": "Herzförmige Ohrringe mit Wellenmuster."
+     }
     ],
     [
      "Super Mario Fragezeichen Würfel",
      6,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Fragezeichen-Block als Ohrhänger."
      }
     ],
     [
      "Gummibären",
-     5
+     5,
+     {
+      "beschreibung": "Ohrhänger in Gummibärchen-Form."
+     }
     ],
     [
      "Rhombus Ohrringe",
-     4
+     4,
+     {
+      "beschreibung": "Ohrringe im Rhombus-Design."
+     }
     ],
     [
      "Harry Potter Ohrringe",
      6,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Ohrringe mit Motiven aus Harry Potter."
      }
     ],
     [
      "Chanel Ohrringe",
      6,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Ohrringe mit Doppel-C-Motiv."
      }
     ],
     [
      "NASA Armband (diverse Farben)",
      12,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Flexibles Gliederarmband, in verschiedenen Farben."
      }
     ],
     [
      "Armband V1",
-     12
+     12,
+     {
+      "beschreibung": "Armband, Version 1."
+     }
     ]
    ]
   },
@@ -454,24 +626,32 @@
    "artikel": [
     [
      "Paddel Tennis Satzzähler",
-     6
+     6,
+     {
+      "beschreibung": "Punktezähler zum Anbringen am Padel-Schläger."
+     }
     ],
     [
      "Autodartsring mit Kamera und Licht Set",
      130,
      {
-      "anleitung": "autodartsring-montage.pdf"
+      "anleitung": "autodartsring-montage.pdf",
+      "beschreibung": "Ring mit Kamera und Licht für die Dartscheibe (Autodarts). Montageanleitung als Download."
      }
     ],
     [
      "Padeltennisschlägerhalterung",
-     8
+     8,
+     {
+      "beschreibung": "Halterung für Padel-Schläger."
+     }
     ],
     [
      "Paddel Watch / Tennis Watch Satzzähler",
      8,
      {
-      "alt": "Padel Tennis Watch Satzzähler"
+      "alt": "Padel Tennis Watch Satzzähler",
+      "beschreibung": "Satzzähler fürs Handgelenk für Padel und Tennis."
      }
     ]
    ]
@@ -483,19 +663,31 @@
    "artikel": [
     [
      "Visitenkartenbox (individuell mit Namen)",
-     12
+     12,
+     {
+      "beschreibung": "Visitenkartenbox, individuell mit Namen."
+     }
     ],
     [
      "NFC Visitenkarte 1 (individuell mit Logo)",
-     10
+     10,
+     {
+      "beschreibung": "NFC-Visitenkarte, individuell mit Logo."
+     }
     ],
     [
      "NFC Visitenkarte 2 (individuell mit Logo)",
-     10
+     10,
+     {
+      "beschreibung": "NFC-Visitenkarte in zweiter Ausführung, individuell mit Logo."
+     }
     ],
     [
      "Kartenhalter (individuell mit Logo)",
-     10
+     10,
+     {
+      "beschreibung": "Kartenhalter, individuell mit Logo."
+     }
     ]
    ]
   },
@@ -506,66 +698,109 @@
    "artikel": [
     [
      "Batcat",
-     5
+     5,
+     {
+      "beschreibung": "Maske im Fledermaus-Look, hier an einer Katze."
+     }
     ],
     [
      "Mehl-Kaffeeverschluss",
-     4
+     4,
+     {
+      "beschreibung": "Verschlussklammer für Mehl- und Kaffeetüten."
+     }
     ],
     [
      "Regalhaken",
-     3
+     3,
+     {
+      "beschreibung": "Haken zum Einhängen in Regalschienen."
+     }
     ],
     [
      "Brillenhalterung Auto",
-     4
+     4,
+     {
+      "beschreibung": "Brillenhalter für die Sonnenblende im Auto."
+     }
     ],
     [
      "Handylautsprecher",
-     20
+     20,
+     {
+      "beschreibung": "Passiver Lautsprecher-Verstärker für das Smartphone."
+     }
     ],
     [
      "Gemüse- und Obstwaschanlage",
-     8
+     8,
+     {
+      "beschreibung": "Waschhilfe für Gemüse und Obst im Spülbecken."
+     }
     ],
     [
      "Teebeutelspender",
-     5
+     5,
+     {
+      "beschreibung": "Spender für Teebeutel."
+     }
     ],
     [
      "Klappbare Weinkiste",
-     40
+     40,
+     {
+      "beschreibung": "Klappbare Kiste für Weinflaschen."
+     }
     ],
     [
      "GT3 Spoiler Regal",
      35,
      {
-      "ip": 1
+      "ip": 1,
+      "beschreibung": "Regal im Look eines Rennwagen-Spoilers."
      }
     ],
     [
      "Brillencase",
-     20
+     20,
+     {
+      "beschreibung": "Etui für Brillen."
+     }
     ],
     [
      "Brillenhalter",
-     30
+     30,
+     {
+      "beschreibung": "Halter für Brillen."
+     }
     ],
     [
      "Kleidungsdruck",
-     10
+     10,
+     {
+      "beschreibung": "Individueller Druck auf Kleidungsstücke."
+     }
     ],
     [
      "Dosenhalter Pool",
-     7
+     7,
+     {
+      "beschreibung": "Halter für Dosen am Poolrand."
+     }
     ],
     [
      "Handyhalter Fahrrad",
-     14
+     14,
+     {
+      "beschreibung": "Handyhalter für das Fahrrad."
+     }
     ],
     [
      "Handyhalter Scooter oder Fahrrad",
-     16
+     16,
+     {
+      "beschreibung": "Handyhalter für Scooter oder Fahrrad."
+     }
     ]
    ]
   }

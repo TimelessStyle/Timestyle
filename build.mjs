@@ -194,7 +194,7 @@ const cats = produkte.kategorien.map((c) => {
       let slug = slugify(a[0]); let n = 2; while (seen.has(slug)) slug = `${slugify(a[0])}-${n++}`; seen.add(slug);
       const o = a[2] || {};
       if (typeof a[1] !== 'number') { staleData = true; }
-      return { slug, name: a[0], price: toNum(a[1]), unit: o.einheit || '', variants: (o.varianten || null),  alt: o.alt || `${a[0]} – ${c.name} von Timestyle_Gravur`, img: findImg('produkte', slug), pdf: o.anleitung && exists(`downloads/${o.anleitung}`) ? o.anleitung : null };
+      return { slug, name: a[0], price: toNum(a[1]), unit: o.einheit || '', variants: (o.varianten || null),  desc: o.beschreibung || '', catName: c.name, alt: o.alt || (o.beschreibung ? `${a[0]}: ${o.beschreibung}` : `${a[0]} – ${c.name} von Timestyle_Gravur`), img: findImg('produkte', slug), pdf: o.anleitung && exists(`downloads/${o.anleitung}`) ? o.anleitung : null };
     });
   return { ...c, items };
 });
@@ -333,12 +333,15 @@ addPage({
 </div></div>
 <section class="section" style="padding-top:0" id="shop"><div class="wrap">
 ${cats.map((c) => `<section class="cat-block" id="${c.id}" aria-labelledby="h-${c.id}"${c.items.length ? '' : ' data-empty="true"'}><h2 id="h-${c.id}">${esc(c.name)} <small>${c.items.length} Artikel</small></h2>
-${c.items.length ? `<div class="pgrid">${c.items.map((i) => `<article class="pcard" data-cat="${c.id}" data-name="${esc(i.name)}">
-<div class="pimg${i.img ? '' : ' ph'}">${i.img ? `<img src="${href(i.img)}" alt="${esc(i.alt)}" width="800" height="600" loading="lazy" decoding="async">` : icon(c.icon)}</div>
-<div class="pbody"><h3>${esc(i.name)}</h3><span class="pprice">${eur(i.variants ? i.variants[0][1] : i.price)}</span>${i.unit && !i.variants ? `<span class="unit">${esc(i.unit)}</span>` : ''}${i.variants ? `<div class="vrow"><select class="var" aria-label="Variante für ${esc(i.name)}">${i.variants.map((v) => `<option data-label="${esc(v[0])}" data-price="${v[1]}">${esc(v[0])} · ${eur(v[1])}</option>`).join('')}</select></div>` : ''}<div class="pfoot"><button type="button" class="add" data-id="${i.slug}" data-name="${esc(i.name)}" data-price="${i.price}" data-unit="${esc(i.unit)}" aria-label="${esc(i.name)} in den Warenkorb legen">In den Warenkorb</button>${i.pdf ? `<a class="dl" href="${href('/downloads/' + i.pdf)}" download>Anleitung (PDF)</a>` : ''}</div></div></article>`).join('')}</div>` : `<p class="empty-cat">Aktuell sind in dieser Kategorie keine Artikel eingetragen. Wünsche gern direkt <a href="${href('/kontakt/#formular')}">anfragen</a>.</p>`}
+${c.items.length ? `<div class="pgrid">${c.items.map((i) => `<article class="pcard" data-cat="${c.id}" data-name="${esc(i.name)}" data-id="${i.slug}" data-price="${i.price}" data-unit="${esc(i.unit)}" data-desc="${esc(i.desc)}" data-catname="${esc(i.catName)}"${i.img ? ` data-img="${href(i.img)}" data-alt="${esc(i.alt)}"` : ''}${i.variants ? ` data-var='${esc(JSON.stringify(i.variants))}'` : ''}${i.pdf ? ` data-pdf="${href('/downloads/' + i.pdf)}"` : ''}>
+<div class="pimg${i.img ? '' : ' ph'}"><button type="button" class="zoom" aria-label="${esc(i.name)}: Details und Großansicht öffnen">${i.img ? `<img src="${href(i.img)}" alt="${esc(i.alt)}" width="1000" height="1000" loading="lazy" decoding="async">` : icon(c.icon)}</button></div>
+<div class="pbody"><h3>${esc(i.name)}</h3>${i.desc ? `<p class="pdesc">${esc(i.desc)}</p>` : ''}<span class="pprice">${eur(i.variants ? i.variants[0][1] : i.price)}</span>${i.unit && !i.variants ? `<span class="unit">${esc(i.unit)}</span>` : ''}${i.variants ? `<div class="vrow"><select class="var" aria-label="Variante für ${esc(i.name)}">${i.variants.map((v) => `<option data-label="${esc(v[0])}" data-price="${v[1]}">${esc(v[0])} · ${eur(v[1])}</option>`).join('')}</select></div>` : ''}<div class="pfoot"><button type="button" class="add" data-id="${i.slug}" data-name="${esc(i.name)}" data-price="${i.price}" data-unit="${esc(i.unit)}" aria-label="${esc(i.name)} in den Warenkorb legen">In den Warenkorb</button>${i.pdf ? `<a class="dl" href="${href('/downloads/' + i.pdf)}" download>Anleitung (PDF)</a>` : ''}</div></div></article>`).join('')}</div>` : `<p class="empty-cat">Aktuell sind in dieser Kategorie keine Artikel eingetragen. Wünsche gern direkt <a href="${href('/kontakt/#formular')}">anfragen</a>.</p>`}
 </section>`).join('')}
 <p id="shop-none" class="noresult" hidden>Keine Treffer. Anderen Suchbegriff probieren oder eine <a href="${href('/kontakt/#formular')}">individuelle Anfrage</a> senden.</p>
-</div></section></main>`,
+</div></section>
+<dialog id="pmodal" class="pmodal" aria-labelledby="pm-title"><button type="button" class="pm-close" aria-label="Schließen">×</button>
+<div class="pm-body"><div class="pm-media"><img id="pm-img" src="" alt="" width="1000" height="1000"><div id="pm-ph" class="pm-ph" hidden></div><button type="button" class="pm-nav prev" aria-label="Vorheriger Artikel">‹</button><button type="button" class="pm-nav next" aria-label="Nächster Artikel">›</button></div>
+<div class="pm-info"><p class="eyebrow" id="pm-cat"></p><h2 id="pm-title"></h2><p id="pm-desc" class="pm-desc"></p><div class="pm-price"><b id="pm-price"></b> <span id="pm-unit" class="unit"></span></div><div id="pm-varwrap" class="field" hidden><label for="pm-var">Variante</label><select id="pm-var"></select></div><button type="button" class="btn btn-dark" id="pm-add">In den Warenkorb</button><a class="dl" id="pm-pdf" href="#" download hidden>Anleitung (PDF)</a><p class="note-s">Preis für die Standardausführung. Sonderwünsche (Größe, Farbe, Gravur) über das <a href="${href('/kontakt/#formular')}">Kontaktformular</a>.</p></div></div></dialog></main>`,
 });
 
 /* ---------- Über uns ---------- */
