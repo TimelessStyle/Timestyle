@@ -256,6 +256,10 @@
   var cf = $('#contact-form');
   if (cf) {
     var CC = JSON.parse(cf.getAttribute('data-conf')), cs = $('#contact-status');
+    try {
+      var qp = new URLSearchParams(location.search).get('produkt');
+      if (qp) { $('#c-thema').value = 'Anfrage zu einem Shop-Artikel'; var cm = $('#c-msg'); if (!cm.value) cm.value = 'Ich interessiere mich für: ' + qp + '\nBitte um ein Angebot mit Preis und Lieferzeit.\n'; }
+    } catch (er) { /* ältere Browser: kein Vorausfüllen */ }
     function contactText() { var f = new FormData(cf); return ['Thema: ' + f.get('thema'), 'Name: ' + f.get('name'), 'E-Mail: ' + f.get('email'), 'Telefon: ' + (f.get('telefon') || '–'), '', f.get('nachricht')].join('\n'); }
     cf.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -297,15 +301,20 @@
   /* ---------- Produkt-Großansicht ---------- */
   var pm = $('#pmodal');
   if (pm && typeof pm.showModal === 'function') {
-    var pmImg = $('#pm-img'), pmPh = $('#pm-ph'), pmVar = $('#pm-var'), pmVarWrap = $('#pm-varwrap'), pmPrice = $('#pm-price'), pmPdf = $('#pm-pdf');
-    var cur = null;
+    var pmThumbs = $('#pm-thumbs'), pmAdd = $('#pm-add'), pmNote = $('#pm-note'), pmImg = $('#pm-img'), pmPh = $('#pm-ph'), pmVar = $('#pm-var'), pmVarWrap = $('#pm-varwrap'), pmPrice = $('#pm-price'), pmPdf = $('#pm-pdf');
+    var cur = null, pmNoteHref = $('a', pmNote).getAttribute('href');
     var visibleCards = function () { return $$('.pcard[data-cat]').filter(function (c) { return !c.hidden && !c.closest('[hidden]'); }); };
     function fill(card) {
       cur = card;
       var img = card.getAttribute('data-img'), vars = card.getAttribute('data-var');
       pmImg.classList.remove('zoomed'); pmImg.style.transformOrigin = '';
-      if (img) { pmImg.hidden = false; pmPh.hidden = true; pmImg.src = img; pmImg.alt = card.getAttribute('data-alt') || card.getAttribute('data-name'); }
+      var more = card.getAttribute('data-imgs'), all = img ? [img].concat(more ? JSON.parse(more) : []) : [], alt0 = card.getAttribute('data-alt') || card.getAttribute('data-name');
+      if (img) { pmImg.hidden = false; pmPh.hidden = true; pmImg.src = img; pmImg.alt = alt0; }
       else { pmImg.hidden = true; pmImg.removeAttribute('src'); pmPh.hidden = false; pmPh.innerHTML = card.querySelector('.zoom').innerHTML; }
+      if (all.length > 1) {
+        pmThumbs.hidden = false;
+        pmThumbs.innerHTML = all.map(function (u, k) { return '<button type="button" class="' + (k === 0 ? 'on' : '') + '" data-src="' + u + '" aria-label="Foto ' + (k + 1) + ' von ' + all.length + '"><img src="' + u + '" alt="" width="64" height="64" loading="lazy"></button>'; }).join('');
+      } else { pmThumbs.hidden = true; pmThumbs.innerHTML = ''; }
       $('#pm-cat').textContent = card.getAttribute('data-catname');
       $('#pm-title').textContent = card.getAttribute('data-name');
       $('#pm-desc').textContent = card.getAttribute('data-desc');
@@ -316,6 +325,8 @@
         pmVarWrap.hidden = false; pmVar.selectedIndex = $('select.var', card) ? $('select.var', card).selectedIndex : 0;
         pmPrice.textContent = eur(parseFloat(pmVar.options[pmVar.selectedIndex].getAttribute('data-price')));
       } else { pmVarWrap.hidden = true; pmPrice.textContent = eur(parseFloat(card.getAttribute('data-price'))); }
+      if (card.getAttribute('data-ask')) { pmPrice.textContent = 'Preis auf Anfrage'; pmAdd.textContent = 'Preis anfragen'; pmNote.textContent = 'Der Preis hängt vom Aufwand ab. Schick uns eine kurze Anfrage, wir melden uns mit einem Angebot.'; }
+      else { pmAdd.textContent = 'In den Warenkorb'; pmNote.innerHTML = 'Preis für die Standardausführung. Sonderwünsche (Größe, Farbe, Gravur) über das <a href="' + pmNoteHref + '">Kontaktformular</a>.'; }
       var pdf = card.getAttribute('data-pdf'); pmPdf.hidden = !pdf; if (pdf) pmPdf.href = pdf;
     }
     function open(card) { fill(card); if (!pm.open) pm.showModal(); }
@@ -324,7 +335,13 @@
       card.addEventListener('click', function (e) { if (e.target.closest('.add, select, a')) return; open(card); });
     });
     pmVar.addEventListener('change', function () { pmPrice.textContent = eur(parseFloat(pmVar.options[pmVar.selectedIndex].getAttribute('data-price'))); });
+    pmThumbs.addEventListener('click', function (e) {
+      var t = e.target.closest('button'); if (!t) return;
+      pmImg.classList.remove('zoomed'); pmImg.src = t.getAttribute('data-src');
+      $$('button', pmThumbs).forEach(function (x) { x.classList.toggle('on', x === t); });
+    });
     $('#pm-add').addEventListener('click', function () {
+      if (cur.getAttribute('data-ask')) { location.href = cur.getAttribute('data-ask'); return; }
       var variant = '', price = parseFloat(cur.getAttribute('data-price'));
       if (!pmVarWrap.hidden) { var o = pmVar.options[pmVar.selectedIndex]; variant = o.getAttribute('data-label'); price = parseFloat(o.getAttribute('data-price')); }
       addItem(cur.getAttribute('data-id'), cur.getAttribute('data-name'), price, variant, cur.getAttribute('data-unit'));

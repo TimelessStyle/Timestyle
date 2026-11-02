@@ -147,7 +147,8 @@
      15,
      {
       "ip": 1,
-      "beschreibung": "Griff in Lenkradform für die Joy-Con der Nintendo Switch."
+      "beschreibung": "Griff für die Joy-Con der Nintendo Switch, inspiriert von Super Mario.",
+      "keinBild": true
      }
     ],
     [
@@ -295,6 +296,55 @@
       "anleitung": "iq-game-sticks-8.pdf",
       "beschreibung": "Knobelspiel mit bunten Stäben, kleinere Variante. Anleitung als Download."
      }
+    ],
+    [
+     "Nudel-Spielset",
+     null,
+     {
+      "beschreibung": "Spielset aus Nudelpackung, Soßenglas, Tomaten, Schüssel mit Rotini-Nudeln und Löffel."
+     }
+    ],
+    [
+     "Toddlermix Multikocher Kinderspielzeug",
+     null,
+     {
+      "beschreibung": "Küchenmaschine als Kinderspielzeug mit Display, Drehknopf und Mixbecher."
+     }
+    ],
+    [
+     "Anpassbarer Spotify Schlüsselanhänger / Anhänger",
+     null,
+     {
+      "beschreibung": "Schlüsselanhänger mit Spotify-Code deines Lieblingssongs, wahlweise mit Albumcover."
+     }
+    ],
+    [
+     "Minecraft Creeper Kopf Schlüsselanhänger",
+     null,
+     {
+      "beschreibung": "Schlüsselanhänger im Pixel-Look als Creeper-Kopf."
+     }
+    ],
+    [
+     "Pokéball-Schlüsselanhänger",
+     null,
+     {
+      "beschreibung": "Schlüsselanhänger in Form eines Pokéballs."
+     }
+    ],
+    [
+     "Individuelle Namens-Schlüsselanhänger",
+     null,
+     {
+      "beschreibung": "Schlüsselanhänger mit deinem Wunschnamen in vielen Farben und Schriften."
+     }
+    ],
+    [
+     "Domino-Steine · Standard und Mini",
+     null,
+     {
+      "beschreibung": "Dominosteine in Standard- und Mini-Größe."
+     }
     ]
    ]
   },
@@ -349,6 +399,20 @@
      {
       "einheit": "pro Stück",
       "beschreibung": "Cake Topper zur Taufe mit Fisch, Datum und Name, pro Stück."
+     }
+    ],
+    [
+     "Kürbis-Dekoration",
+     null,
+     {
+      "beschreibung": "Gerippter Deko-Kürbis in zwei Größen, in hellen Naturtönen."
+     }
+    ],
+    [
+     "Eichel-Behälter-Dekoration (Teelicht-kompatibel)",
+     null,
+     {
+      "beschreibung": "Eichelförmiger Behälter mit abnehmbarem Deckel, auch für Teelichter geeignet."
      }
     ]
    ]
@@ -416,6 +480,13 @@
      {
       "beschreibung": "Geriffelte Hasenfiguren in Pastellfarben als Osterdekoration."
      }
+    ],
+    [
+     "Hasen im Gleichgewicht Osterspiel",
+     null,
+     {
+      "beschreibung": "Geschicklichkeitsspiel zu Ostern: Hasenfiguren in Lila und Gelb auf dem Baum im Gleichgewicht halten."
+     }
     ]
    ]
   },
@@ -423,7 +494,15 @@
    "id": "weihnachten",
    "name": "Weihnachten",
    "icon": "tree",
-   "artikel": []
+   "artikel": [
+    [
+     "Kerzenhalter mit Schleife",
+     null,
+     {
+      "beschreibung": "Kerzenhalter in Form einer roten Schleife für Stabkerzen."
+     }
+    ]
+   ]
   },
   {
    "id": "interior-design",
@@ -542,6 +621,13 @@
      {
       "beschreibung": "Skulptur in Form einer geteilten Büste."
      }
+    ],
+    [
+     "Pixi-Buch-Haus",
+     null,
+     {
+      "beschreibung": "Kinder-Bücherregal in Hausform für Pixi-Bücher und andere kleine Bücher."
+     }
     ]
    ]
   },
@@ -653,6 +739,13 @@
       "alt": "Padel Tennis Watch Satzzähler",
       "beschreibung": "Satzzähler fürs Handgelenk für Padel und Tennis."
      }
+    ],
+    [
+     "NFL Fantasy Pokal",
+     null,
+     {
+      "beschreibung": "Individuell gefertigter Pokal für die Sieger deiner NFL-Fantasy-Liga."
+     }
     ]
    ]
   },
@@ -687,6 +780,34 @@
      10,
      {
       "beschreibung": "Kartenhalter, individuell mit Logo."
+     }
+    ]
+   ]
+  },
+  {
+   "id": "schulanfang",
+   "name": "Schulanfang",
+   "icon": "grid",
+   "artikel": [
+    [
+     "Schultütenständer",
+     null,
+     {
+      "beschreibung": "Ständer für die Schultüte, auf Wunsch mit Text und Symbol personalisiert."
+     }
+    ],
+    [
+     "Einhorn Schultütenständer",
+     null,
+     {
+      "beschreibung": "Schultütenständer im Einhorn-Design."
+     }
+    ],
+    [
+     "Schultütenständer Herz",
+     null,
+     {
+      "beschreibung": "Schultütenständer mit Herz-Motiv."
      }
     ]
    ]
