@@ -195,7 +195,7 @@ const cats = produkte.kategorien.map((c) => {
       const o = a[2] || {};
       const anfrage = a[1] === null || a[1] === undefined;
       if (!anfrage && typeof a[1] !== 'number') { staleData = true; }
-      const imgs = []; for (let k = 2; k < 12; k++) { const x = findImg('produkte', `${slug}--${k}`); if (x) imgs.push(x); else break; }
+      const imgs = []; for (let k = 2; k < 12; k++) { const x = findImg('produkte', `${slug}--${k}`); if (x) imgs.push(x); else break; } if (o.maxBilder) imgs.length = Math.min(imgs.length, Math.max(0, o.maxBilder - 1));
       return { slug, name: a[0], anfrage, imgs, price: anfrage ? 0 : toNum(a[1]), unit: o.einheit || '', variants: (o.varianten || null),  desc: o.beschreibung || '', catName: c.name, alt: o.alt || (o.beschreibung ? `${a[0]}: ${o.beschreibung}` : `${a[0]} – ${c.name} von Timestyle_Gravur`), img: o.keinBild ? null : findImg('produkte', slug), pdf: o.anleitung && exists(`downloads/${o.anleitung}`) ? o.anleitung : null };
     });
   return { ...c, items };
