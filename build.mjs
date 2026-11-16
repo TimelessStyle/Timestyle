@@ -26,14 +26,16 @@ const DIST = path.join(ROOT, 'dist');
     [/^(bildnamen\.txt|inhaltsinventar\.md)$/, 'docs'],
     [/^(make-icons|qa)\.mjs$/, 'tools'],
     [/^[a-z0-9-]+\.pdf$/, 'src/downloads'],
-    [/^[a-z0-9-]+\.(webp|jpe?g|png|avif)$/, 'src/assets/img/produkte'],
+    [/^[a-z0-9-]+(\.(jpe?g|png))?\.(webp|jpe?g|png|avif)$/i, 'src/assets/img/produkte'],
   ];
   let moved = 0;
   for (const e of fs.readdirSync(ROOT, { withFileTypes: true })) {
     if (!e.isFile()) continue;
     const r = rules.find(([re]) => re.test(e.name));
     if (!r) continue;
-    const dst = path.join(ROOT, r[1], e.name);
+    /* Doppelte Endungen (z. B. bild.jpg.webp) und Großschreibung werden zu bild.webp bereinigt */
+    const clean = r[1] === 'src/assets/img/produkte' ? e.name.toLowerCase().replace(/(\.(jpe?g|png))(\.(webp|jpe?g|png|avif))$/, '$3') : e.name;
+    const dst = path.join(ROOT, r[1], clean);
     if (fs.existsSync(dst)) continue;
     fs.mkdirSync(path.dirname(dst), { recursive: true });
     fs.copyFileSync(path.join(ROOT, e.name), dst); moved++;
@@ -61,6 +63,10 @@ const base = cfg.basePath || '';
 const href = (p) => base + p;
 const abs = (p) => cfg.siteUrl + base + p;
 const exists = (p) => fs.existsSync(path.join(SRC, p));
+(function fixDoubleExt() {
+  const d = path.join(SRC, 'assets/img/produkte'); if (!fs.existsSync(d)) return;
+  for (const f of fs.readdirSync(d)) { const c = f.toLowerCase().replace(/(\.(jpe?g|png))(\.(webp|jpe?g|png|avif))$/, '$3'); if (c !== f && !fs.existsSync(path.join(d, c))) fs.copyFileSync(path.join(d, f), path.join(d, c)); }
+})();
 const findImg = (dir, slug) => { for (const e of ['webp', 'avif', 'jpg', 'jpeg', 'png']) if (exists(`assets/img/${dir}/${slug}.${e}`)) return `/assets/img/${dir}/${slug}.${e}`; return null; };
 const eur = (n) => n.toFixed(2).replace('.', ',') + ' €';
 const year = new Date().getFullYear();
