@@ -504,10 +504,11 @@
     ],
     [
      "Wichtel Stapelsteine",
-     null,
+     7.9,
      {
       "beschreibung": "Miniatur-Spielsteine zum Stapeln als Zubehör für Wichtelszenen, mit naturnaher Steinoptik.",
-      "alt": "Beigefarbener Stapelstein mit gewölbter Oberseite, Modellansicht"
+      "alt": "Beigefarbener Stapelstein mit gewölbter Oberseite, Modellansicht",
+      "titelbild": 2
      }
     ]
    ]

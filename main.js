@@ -325,6 +325,7 @@
         pmVarWrap.hidden = false; pmVar.selectedIndex = $('select.var', card) ? $('select.var', card).selectedIndex : 0;
         pmPrice.textContent = eur(parseFloat(pmVar.options[pmVar.selectedIndex].getAttribute('data-price')));
       } else { pmVarWrap.hidden = true; pmPrice.textContent = eur(parseFloat(card.getAttribute('data-price'))); }
+      var isAsk = !!card.getAttribute('data-ask'); $('#pm-ship').hidden = isAsk; $('#pm-shipnote').hidden = isAsk;
       if (card.getAttribute('data-ask')) { pmPrice.textContent = 'Preis auf Anfrage'; pmAdd.textContent = 'Preis anfragen'; pmNote.textContent = 'Der Preis hängt vom Aufwand ab. Schick uns eine kurze Anfrage, wir melden uns mit einem Angebot.'; }
       else { pmAdd.textContent = 'In den Warenkorb'; pmNote.innerHTML = 'Preis für die Standardausführung. Sonderwünsche (Größe, Farbe, Gravur) über das <a href="' + pmNoteHref + '">Kontaktformular</a>.'; }
       var pdf = card.getAttribute('data-pdf'); pmPdf.hidden = !pdf; if (pdf) pmPdf.href = pdf;
